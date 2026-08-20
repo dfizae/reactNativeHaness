@@ -3,7 +3,7 @@
 ## 프로젝트 기본 정보
 
 - Expo 기반 React Native 앱이다. 기술 스택은 Expo SDK 57, React Native 0.86, React 19, TypeScript이다.
-- 패키지 매니저는 `npm`만 사용한다. 네이티브 모듈이 포함되거나 Expo SDK 버전에 민감한 패키지는 `npx expo install`로 설치한다.
+- 패키지 매니저는 `pnpm`만 사용한다. 네이티브 모듈이 포함되거나 Expo SDK 버전에 민감한 패키지는 `pnpm expo install`로 설치한다.
 - 라우팅은 Expo Router(파일 기반), 스타일링은 NativeWind(Tailwind 문법)를 사용한다.
 - 서버 상태는 TanStack Query, 전역 클라이언트 상태는 Zustand, HTTP 클라이언트는 axios를 사용한다.
 - 위 스택 중 아직 설치되지 않은 항목(TypeScript, Expo Router, NativeWind 포함)은 필요한 시점에 승인을 받아 설치한다.

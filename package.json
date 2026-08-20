@@ -2,6 +2,7 @@
   "name": "myfirstapp",
   "version": "1.0.0",
   "main": "expo-router/entry",
+  "packageManager": "pnpm@11.13.0",
   "dependencies": {
     "expo": "~57.0.14",
     "expo-constants": "~57.0.12",

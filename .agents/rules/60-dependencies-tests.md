@@ -1,7 +1,7 @@
 ---
 paths:
   - "package.json"
-  - "package-lock.json"
+  - "pnpm-lock.yaml"
   - "eslint.config.js"
   - "eslint.config.mjs"
   - "eslint.config.ts"
@@ -22,9 +22,9 @@ paths:
 
 ## 의존성
 
-- 패키지 작업은 `npm`으로만 수행한다.
-- 네이티브 모듈이 포함되거나 Expo SDK 버전에 민감한 패키지는 `npm install`이 아니라 `npx expo install`로 설치해 호환 버전을 맞춘다.
-- lockfile(`package-lock.json`)을 직접 수정하지 않는다.
+- 패키지 작업은 `pnpm`으로만 수행한다.
+- 네이티브 모듈이 포함되거나 Expo SDK 버전에 민감한 패키지는 `pnpm add`가 아니라 `pnpm expo install`로 설치해 호환 버전을 맞춘다.
+- lockfile(`pnpm-lock.yaml`)을 직접 수정하지 않는다.
 - 이미 설치된 라이브러리로 해결 가능한 문제에 동일한 목적의 새 라이브러리를 추가하지 않는다.
 - 새로운 패키지 설치, 기존 패키지 제거, 주요 버전 변경, Expo SDK 업그레이드 전에는 확인을 요청한다.
 - 오류를 없애기 위해 ESLint 또는 TypeScript 규칙을 비활성화하거나 완화하지 않는다.
