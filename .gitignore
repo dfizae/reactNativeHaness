@@ -39,3 +39,6 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Claude Code 작업 기록 — 로컬 전용 (Notion 미러가 공유본)
+WORKLOG.md
