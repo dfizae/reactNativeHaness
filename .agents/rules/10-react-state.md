@@ -2,10 +2,8 @@
 paths:
   - "app/**"
   - "components/**"
+  - "features/**"
   - "hooks/**"
-  - "src/**"
-  - "App.js"
-  - "App.tsx"
 ---
 
 # React 및 상태 관리

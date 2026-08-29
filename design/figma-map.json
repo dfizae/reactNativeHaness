@@ -1,0 +1,169 @@
+{
+  "$description": "화면·컴포넌트 → Figma 노드 매핑. 화면을 구현하기 전에 여기서 노드 URL을 찾아 get_design_context / get_screenshot으로 대조한다. URL이 TBD인 항목은 Figma에 아직 없는 것이며 DESIGN.md 기준으로 구현하되 보고서에 'Figma 미대조'로 표시한다.",
+  "file": {
+    "key": "TBD",
+    "url": "TBD",
+    "pages": {
+      "foundations": "TBD",
+      "components": "TBD",
+      "screens": "TBD"
+    }
+  },
+  "components": {
+    "Text": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "code": "components/ui/text.tsx",
+      "source": "react-native-reusables"
+    },
+    "Button": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "code": "components/ui/button.tsx",
+      "source": "react-native-reusables"
+    },
+    "Input": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "code": "components/ui/input.tsx",
+      "source": "react-native-reusables"
+    },
+    "Card": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "code": "components/ui/card.tsx",
+      "source": "react-native-reusables"
+    },
+    "Badge": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "code": "components/ui/badge.tsx",
+      "source": "react-native-reusables"
+    },
+    "Skeleton": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "code": "components/ui/skeleton.tsx",
+      "source": "react-native-reusables"
+    },
+    "Separator": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "code": "components/ui/separator.tsx",
+      "source": "react-native-reusables"
+    },
+    "Icon": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "code": "components/ui/icon.tsx",
+      "source": "react-native-reusables"
+    },
+    "Dialog": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "code": "components/ui/dialog.tsx",
+      "source": "react-native-reusables"
+    },
+    "AmountText": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "code": "components/ui/amount-text.tsx"
+    },
+    "AmountInput": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "code": "components/ui/amount-input.tsx"
+    },
+    "EmptyState": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "code": "components/ui/empty-state.tsx"
+    },
+    "Toast": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "code": "components/ui/toast.tsx"
+    },
+    "BottomSheet": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "code": "components/ui/bottom-sheet.tsx"
+    },
+    "ListGroup": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "code": "components/ui/list-group.tsx"
+    },
+    "AccountCard": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "code": "features/account/components/AccountCard.tsx"
+    },
+    "TransactionRow": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "code": "features/account/components/TransactionRow.tsx"
+    },
+    "PinPad": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "code": "features/auth/components/PinPad.tsx"
+    }
+  },
+  "screens": {
+    "onboarding": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "route": "app/(auth)/onboarding.tsx"
+    },
+    "login": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "route": "app/(auth)/login.tsx"
+    },
+    "pin": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "route": "app/(auth)/pin.tsx"
+    },
+    "home": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "route": "app/(tabs)/index.tsx"
+    },
+    "account-detail": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "route": "app/account/[accountId].tsx"
+    },
+    "transfer-recipient": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "route": "app/transfer/recipient.tsx"
+    },
+    "transfer-amount": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "route": "app/transfer/amount.tsx"
+    },
+    "transfer-confirm": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "route": "app/transfer/confirm.tsx"
+    },
+    "transfer-complete": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "route": "app/transfer/complete.tsx"
+    },
+    "settings": {
+      "nodeId": "TBD",
+      "url": "TBD",
+      "route": "app/(tabs)/settings.tsx"
+    }
+  },
+  "pencil": {
+    "file": "design.pen",
+    "note": "Figma 플러그인으로 불러온 작업 파일. 아트보드 이름 = screens 키"
+  }
+}

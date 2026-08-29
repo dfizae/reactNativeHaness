@@ -9,7 +9,7 @@ metadata:
 
 # Brand
 
-Brand identity, voice, messaging, asset management, and consistency frameworks.
+브랜드 보이스·비주얼 아이덴티티·메시징 프레임워크 참조 스킬. 이 프로젝트에서는 `references/brand-guideline-template.md`와 `templates/`를 기준으로 브랜드 가이드 문서를 작성할 때만 사용한다. 색·타이포 값의 원천은 `design/tokens.json`이며 원본의 CLI 스크립트는 제거했다.
 
 ## When to Use
 
@@ -19,40 +19,6 @@ Brand identity, voice, messaging, asset management, and consistency frameworks.
 - Brand consistency review and audit
 - Asset organization, naming, and approval
 - Color palette management and typography specs
-
-## Quick Start
-
-**Inject brand context into prompts:**
-```bash
-node scripts/inject-brand-context.cjs
-node scripts/inject-brand-context.cjs --json
-```
-
-**Validate an asset:**
-```bash
-node scripts/validate-asset.cjs <asset-path>
-```
-
-**Extract/compare colors:**
-```bash
-node scripts/extract-colors.cjs --palette
-node scripts/extract-colors.cjs <image-path>
-```
-
-## Brand Sync Workflow
-
-```bash
-# 1. Edit docs/brand-guidelines.md (or use /brand update)
-# 2. Sync to design tokens
-node scripts/sync-brand-to-tokens.cjs
-# 3. Verify
-node scripts/inject-brand-context.cjs --json | head -20
-```
-
-**Files synced:**
-- `docs/brand-guidelines.md` → Source of truth
-- `assets/design-tokens.json` → Token definitions
-- `assets/design-tokens.css` → CSS variables
 
 ## Subcommands
 
@@ -74,15 +40,6 @@ node scripts/inject-brand-context.cjs --json | head -20
 | Typography | `references/typography-specifications.md` |
 | Logo Usage | `references/logo-usage-rules.md` |
 | Approval Checklist | `references/approval-checklist.md` |
-
-## Scripts
-
-| Script | Purpose |
-|--------|---------|
-| `scripts/inject-brand-context.cjs` | Extract brand context for prompt injection |
-| `scripts/sync-brand-to-tokens.cjs` | Sync brand-guidelines.md → design-tokens.json/css |
-| `scripts/validate-asset.cjs` | Validate asset naming, size, format |
-| `scripts/extract-colors.cjs` | Extract and compare colors against palette |
 
 ## Templates
 

@@ -1,7 +1,7 @@
 ---
 paths:
   - "api/**/*.ts"
-  - "src/api/**/*.ts"
+  - "features/**/api/**/*.ts"
   - "**/queries/**/*.ts"
   - "**/mutations/**/*.ts"
   - "hooks/**/*.ts"

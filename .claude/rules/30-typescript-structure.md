@@ -2,10 +2,9 @@
 paths:
   - "app/**"
   - "components/**"
+  - "features/**"
   - "hooks/**"
   - "lib/**"
-  - "src/**"
-  - "App.tsx"
 ---
 
 # TypeScript, 컴포넌트 및 파일 구조

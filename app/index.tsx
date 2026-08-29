@@ -1,41 +1,21 @@
-import { useState } from "react";
-import { Button, FlatList, Text, TextInput } from "react-native";
+import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-interface Todo {
-  id: string;
-  name: string;
-}
+import { Text } from "@/components/ui/text";
 
 export default function HomeScreen() {
-  const [text, setText] = useState("");
-  const [todos, setTodos] = useState<Todo[]>([]);
-
-  const addTodo = () => {
-    if (text.trim() === "") {
-      return;
-    }
-    setTodos((prev) => [...prev, { id: Date.now().toString(), name: text }]);
-    setText("");
-  };
-
   return (
-    <SafeAreaView className="flex-1 bg-white px-5">
-      <Text className="mb-4 text-2xl font-semibold">나의 할 일</Text>
-      <TextInput
-        className="mb-2 rounded-lg border border-slate-300 p-2.5"
-        placeholder="할 일을 입력하세요"
-        value={text}
-        onChangeText={setText}
-      />
-      <Button title="추가" onPress={addTodo} />
-      <FlatList
-        data={todos}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <Text className="py-1.5 text-lg">{item.name}</Text>
-        )}
-      />
+    <SafeAreaView className="flex-1 bg-background px-5">
+      <View className="gap-2 py-6">
+        <Text className="text-h1">홈</Text>
+        <Text className="text-body-sm text-muted-foreground">
+          화면은 design/figma-map.json의 노드를 대조해 구현합니다.
+        </Text>
+      </View>
+      <View className="rounded-xl border border-border bg-card p-4">
+        <Text className="text-label text-muted-foreground">토큰 적용 확인</Text>
+        <Text className="text-amount-md tabular-nums">0원</Text>
+      </View>
     </SafeAreaView>
   );
 }

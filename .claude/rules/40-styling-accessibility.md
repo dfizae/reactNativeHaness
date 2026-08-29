@@ -2,9 +2,7 @@
 paths:
   - "app/**"
   - "components/**"
-  - "src/**"
-  - "App.js"
-  - "App.tsx"
+  - "features/**"
   - "global.css"
   - "tailwind.config.js"
 ---
@@ -13,10 +11,10 @@ paths:
 
 ## NativeWind와 디자인 토큰
 
-- 스타일링은 NativeWind 유틸리티(`className`)와 `tailwind.config.js` 테마 토큰만 사용한다.
+- 스타일링은 NativeWind 유틸리티(`className`)와 `tailwind.config.js` 테마 토큰만 사용한다. 테마는 `design/tokens.json`에서 생성되므로 `tailwind.config.js`를 직접 수정하지 않는다.
 - 인라인 `style` prop은 애니메이션 값, 측정 기반 크기처럼 NativeWind로 표현할 수 없는 동적 값에만 사용한다.
 - `StyleSheet.create` 기반 스타일을 새로 작성하지 않는다. 기존 `StyleSheet` 코드를 수정할 때는 NativeWind로의 전환을 검토한다.
-- UI는 블루 계열의 신뢰감을 주는 톤을 유지한다.
+- 디자인 톤, 타이포그래피, 간격 기준은 `design/DESIGN.md`를 따른다. 토큰 사용 규칙은 `70-design-tokens.md`에 있다.
 - 색상, 간격, 크기 값을 임의의 hex 값이나 arbitrary value로 반복하지 않고 디자인 토큰을 사용한다.
 - 필요한 디자인 값이 토큰에 없다면 기존 토큰으로 표현할 수 있는지 먼저 검토하고, 반복 사용되는 값은 테마 토큰으로 추가한다.
 - 동일한 class 조합이 반복되더라도 단순히 코드를 줄이기 위한 컴포넌트 추출은 피하고, 의미 있는 UI 단위일 때만 추출한다.

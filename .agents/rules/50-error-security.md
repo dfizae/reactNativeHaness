@@ -2,11 +2,9 @@
 paths:
   - "app/**"
   - "components/**"
+  - "features/**"
   - "hooks/**"
   - "lib/**"
-  - "src/**"
-  - "App.js"
-  - "App.tsx"
   - "app.json"
   - ".env"
   - ".env.*"
