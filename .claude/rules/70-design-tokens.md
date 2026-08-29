@@ -35,6 +35,7 @@ paths:
 - 공용 UI의 기반은 React Native Reusables(RNR, shadcn 규약)다. `components.json`이 설정되어 있으며 새 컴포넌트는 `pnpm ui:add https://reactnativereusables.com/r/nativewind/<name>.json`으로 추가한다. `npx @react-native-reusables/cli add`는 pnpm 빌드 승인 경고에 걸려 실패할 수 있으므로 위 명령을 사용한다.
 - 추가된 파일은 벤더 파일이다. 첫 줄의 `// vendor: react-native-reusables` 주석을 유지하고 원본을 최대한 수정하지 않는다. 프로젝트 수정이 필요하면 해당 줄에 `// project:` 주석을 남긴다. `tokens:check`는 벤더 파일에서 arbitrary value·프리미티브 팔레트 검사를 면제하지만 hex와 `StyleSheet.create`는 검사한다.
 - 텍스트는 React Native `Text` 대신 `@/components/ui/text`의 `Text`를 사용한다(`font-sans`로 Pretendard가 적용된다). 아이콘은 `@/components/ui/icon`의 `Icon as={LucideIcon}`을 사용한다.
+- RNR `Text`의 `variant`(`h1`~`h4`, `lead`, `muted` 등)는 웹 기본값(`text-4xl font-extrabold` 등)이므로 화면 코드에서 쓰지 않는다. 크기·가중치는 타이포 토큰 클래스(`className="text-h1"`)로만 지정한다. `variant`는 RNR 내부 컴포넌트(`CardTitle` 등)가 쓰는 것만 허용한다.
 - 버튼은 RNR `Button`(variant `default`=primary, `secondary`, `outline`, `ghost`, `destructive`, `link`)을 사용하고 새로운 버튼 컴포넌트를 만들지 않는다. 주요 CTA는 `size="lg"` + `h-button-lg`.
 - RNR에 없는 도메인 컴포넌트(`AmountText`, `AmountInput`, `EmptyState`, `Toast`, `BottomSheet`, `ListGroup`)는 RNR 컴포넌트를 조합해 `components/ui/`에 kebab-case 파일로 만든다. 이름은 `design/DESIGN.md` 5-2 인벤토리를 따른다.
 - 경로 별칭 `@/`는 프로젝트 루트다(`tsconfig.json` paths).

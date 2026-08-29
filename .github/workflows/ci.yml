@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    name: typecheck · lint · test · tokens · harness
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        # package.json 의 packageManager 필드(pnpm@11.x)를 읽는다
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Test
+        run: pnpm test -- --ci
+
+      - name: Design tokens (산출물 최신 여부 + 토큰 위반)
+        run: pnpm tokens:check
+
+      - name: Harness (미러·lock·frontmatter)
+        run: pnpm harness:check

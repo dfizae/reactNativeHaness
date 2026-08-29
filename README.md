@@ -13,7 +13,8 @@ Expo(SDK 57) / React Native 0.86 기반 핀테크 모바일 클라이언트와, 
 | Server / Client State | TanStack Query · Zustand · axios | 설치됨 |
 | Security | expo-secure-store · expo-local-authentication | 설치됨 |
 | Icon / Font | lucide-react-native · Pretendard(expo-font, `assets/fonts/`) | 설치됨 (폰트는 개발 빌드에서 적용) |
-| Lint / Test | ESLint(`pnpm lint`) · jest-expo + RNTL | ESLint 설치됨 · 테스트 미도입 |
+| Lint / Test | ESLint(`pnpm lint`) · jest-expo + React Native Testing Library(`pnpm test`) | 설치됨 |
+| Build | 개발 빌드(expo-dev-client / EAS) 기준. Expo Go는 UI 확인용(Pretendard 미적용) | 결정됨 |
 | Package Manager | pnpm 11 (npm/yarn 금지) | 전용 |
 
 ## 빠른 시작
@@ -24,6 +25,7 @@ pnpm start            # a / i / w 로 플랫폼 전환
 
 pnpm typecheck        # tsc --noEmit
 pnpm lint             # expo lint (ESLint flat config)
+pnpm test             # jest-expo + RNTL
 pnpm ui:add https://reactnativereusables.com/r/nativewind/<name>.json   # RNR 컴포넌트 추가
 pnpm tokens:sync      # design/tokens.json → tailwind.config.js, global.css, lib/theme.ts
 pnpm tokens:check     # 산출물 최신 여부 + UI 코드의 토큰 위반 검사
@@ -46,7 +48,8 @@ pnpm harness:check    # 미러·JSON·skills-lock·토큰 산출물 무결성 �
 │   ├── rules/                #   00~60 기본, 70 디자인 토큰, 80 핀테크 보안, 90 백엔드 계약
 │   └── skills/               #   figma-sync · pencil-design · fintech-ui-patterns (+ 외부 참조 스킬)
 ├── .claude/                  # Claude Code 미러 (rules, skills, settings.json)
-├── scripts/                  # sync-tokens · check-tokens · sync-harness · check-harness
+├── scripts/                  # sync-tokens · check-tokens · sync-harness · check-harness · hooks/post-edit-check
+├── .github/workflows/ci.yml  # CI: typecheck · lint · test · tokens · harness
 ├── docs/                     # 코드 품질 기준 (토스 Frontend Fundamentals, Clean Code)
 ├── app/                      # Expo Router 라우트 — 화면 조립만
 ├── features/<domain>/        # account · transfer · auth · payment … (api/, components/, model.ts)
@@ -105,6 +108,11 @@ Pencil design.pen(루트) (Figma 플러그인 임포트·확정) ◀── DESIG
 
 - Pencil MCP는 에디터에 `.pen` 파일이 열려 있어야 응답합니다. 허용 도구: `get_app_state`, `get_style`, `read_skill`(읽기), `execute`(쓰기, 확인 후).
 - Figma MCP는 읽기 도구(`get_variable_defs`, `get_design_context`, `get_screenshot`, `get_metadata`)를 허용합니다. `use_figma`·Code Connect 쓰기는 확인 후 실행하며, View 시트에서는 실패할 수 있습니다.
+
+## 자동 검사
+
+- **Claude Code 훅** (`.claude/settings.json` → `scripts/hooks/post-edit-check.sh`): `app/ components/ features/ lib/` 편집 후 `tokens:check` 자동 실행(위반 시 Claude에게 오류 반환), `design/tokens.json` 편집 후 산출물 재생성, `.agents/` 편집 후 `.claude/` 미러 동기화.
+- **GitHub Actions** (`.github/workflows/ci.yml`): push/PR마다 `typecheck · lint · test · tokens:check · harness:check`.
 
 ## 하네스 유지보수
 

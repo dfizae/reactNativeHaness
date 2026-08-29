@@ -18,7 +18,9 @@
       "Bash(pnpm tokens:sync)",
       "Bash(pnpm tokens:check)",
       "Bash(pnpm harness:check)",
-      "Bash(pnpm harness:sync)"
+      "Bash(pnpm harness:sync)",
+      "Bash(pnpm test)",
+      "Bash(pnpm test *)"
     ],
     "ask": [
       "mcp__pencil__execute",
@@ -27,6 +29,21 @@
       "mcp__claude_ai_Figma__add_code_connect_map",
       "mcp__claude_ai_Figma__send_code_connect_mappings",
       "mcp__claude_ai_Figma__upload_assets"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/hooks/post-edit-check.sh",
+            "timeout": 60,
+            "statusMessage": "토큰·하네스 검사 중"
+          }
+        ]
+      }
     ]
   }
 }

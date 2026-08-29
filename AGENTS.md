@@ -8,7 +8,9 @@
 - 라우팅은 Expo Router(파일 기반), 스타일링은 NativeWind(Tailwind 문법)를 사용한다.
 - 서버 상태는 TanStack Query, 전역 클라이언트 상태는 Zustand, HTTP 클라이언트는 axios를 사용한다. 보안 저장소는 `expo-secure-store`, 생체인증은 `expo-local-authentication`, 아이콘은 `lucide-react-native`, 폰트는 Pretendard(`expo-font`)를 사용한다.
 - 공용 UI는 React Native Reusables(RNR, shadcn 규약, `components/ui/`)를 기반으로 하며 `pnpm ui:add https://reactnativereusables.com/r/nativewind/<name>.json`으로 추가한다. 유틸은 `cn`(`@/lib/utils`), 경로 별칭 `@/`는 프로젝트 루트다.
-- 위 스택은 모두 설치되어 있다. ESLint는 `pnpm lint`로 실행하고, 테스트(jest-expo + RNTL)는 아직 도입되지 않았다. 현재 설치 상태는 `package.json`이 기준이다.
+- 위 스택은 모두 설치되어 있다. ESLint는 `pnpm lint`, 테스트는 `pnpm test`(jest-expo + React Native Testing Library)로 실행한다. 현재 설치 상태는 `package.json`이 기준이다.
+- 빌드 전제는 **개발 빌드(expo-dev-client / EAS)** 다. `app.json` config plugin(폰트 등)과 네이티브 모듈을 사용할 수 있으며, Expo Go는 UI 확인용으로만 쓴다(Pretendard 미적용).
+- 자동 검사: `.claude/settings.json`의 PostToolUse 훅이 `app/ components/ features/ lib/` 편집 후 `tokens:check`를, `design/tokens.json` 편집 후 산출물 재생성을, `.agents/` 편집 후 미러 동기화를 자동 실행한다. GitHub Actions(`.github/workflows/ci.yml`)가 push/PR마다 typecheck·lint·test·tokens:check·harness:check를 실행한다.
 
 ## 디렉토리 역할
 
