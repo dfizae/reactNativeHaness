@@ -139,7 +139,7 @@
 
 | 항목 | 값 |
 |---|---|
-| Pencil 작업 파일 | `design.pen` — 2026-08-30 Figma UI 킷 붙여넣기(킷 원본 프레임 17개 유지) + 토큰 기준 `Color style / tokens`·`Text style / tokens` 프레임, 구현 기준 아트보드 `home`·`home/dark`. 문서 변수 = 시맨틱 토큰(라이트/다크), 서체는 Pencil에 Pretendard가 없어 `$font-sans` = Noto Sans KR 대체 |
+| Pencil 작업 파일 | `design.pen` — 2026-08-30 Figma UI 킷 붙여넣기(킷 원본 프레임 17개 유지) + 토큰 기준 `Color style / tokens`·`Text style / tokens` 프레임, 구현 기준 아트보드 `home`·`home/dark`. 문서 변수 = 시맨틱 토큰(라이트/다크), `$font-sans` = Pretendard(2026-08-30 교체. Pencil은 Google 폰트만 렌더하므로 캔버스에서는 폴백 서체로 보이고, Figma 이관 시 `tokens.json`의 `fontFamily`(Pretendard)로 치환된다) |
 | Figma 파일 | TBD (킷 원본 URL 미기록) |
 | Variables 컬렉션 | 없음 — 킷은 스타일 프레임만 제공. Figma Variables 생성 후 `figma-sync` 필요 |
 | 마지막 동기화 | Pencil 추출 2026-08-30 (`$source.pencilImportedAt`). Figma Variables 동기화 없음 |

@@ -74977,7 +74977,7 @@
       "id": "aXqux",
       "x": 5113,
       "y": -57,
-      "name": "Sign in",
+      "name": "로그인",
       "clip": true,
       "width": 375,
       "height": 812,
@@ -79393,7 +79393,8 @@
               "content": "강조 본문 Body large",
               "lineHeight": 1.5555555555555556,
               "fontFamily": "$font-sans",
-              "fontSize": 18
+              "fontSize": 18,
+              "fontWeight": "normal"
             }
           ]
         },
@@ -79453,7 +79454,8 @@
               "content": "기본 본문 Body 2 — 계좌를 연결하면 잔액을 여기서 볼 수 있어요.",
               "lineHeight": 1.5,
               "fontFamily": "$font-sans",
-              "fontSize": 16
+              "fontSize": 16,
+              "fontWeight": "normal"
             }
           ]
         },
@@ -79513,7 +79515,8 @@
               "content": "보조 설명 Body 3 — 연결 상태를 확인한 뒤 다시 시도해 주세요.",
               "lineHeight": 1.5,
               "fontFamily": "$font-sans",
-              "fontSize": 14
+              "fontSize": 14,
+              "fontWeight": "normal"
             }
           ]
         },
@@ -79882,7 +79885,8 @@
                               "content": "하네스은행",
                               "lineHeight": 1.5,
                               "fontFamily": "$font-sans",
-                              "fontSize": 14
+                              "fontSize": 14,
+                              "fontWeight": "normal"
                             }
                           ]
                         },
@@ -79925,7 +79929,8 @@
                           "content": "110-***-**6789",
                           "lineHeight": 1.5,
                           "fontFamily": "$font-sans",
-                          "fontSize": 16
+                          "fontSize": 16,
+                          "fontWeight": "normal"
                         },
                         {
                           "type": "text",
@@ -80789,7 +80794,8 @@
                               "content": "하네스은행",
                               "lineHeight": 1.5,
                               "fontFamily": "$font-sans",
-                              "fontSize": 14
+                              "fontSize": 14,
+                              "fontWeight": "normal"
                             }
                           ]
                         },
@@ -80832,7 +80838,8 @@
                           "content": "110-***-**6789",
                           "lineHeight": 1.5,
                           "fontFamily": "$font-sans",
-                          "fontSize": 16
+                          "fontSize": 16,
+                          "fontWeight": "normal"
                         },
                         {
                           "type": "text",
@@ -82152,7 +82159,7 @@
     },
     "font-sans": {
       "type": "string",
-      "value": "Noto Sans KR"
+      "value": "Pretendard"
     }
   },
   "fileToken": "fa071aad-4c02-4bd9-ae73-c573c1b78a6e"

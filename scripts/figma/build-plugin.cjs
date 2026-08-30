@@ -80,12 +80,12 @@ const samples = {
   button: "이체하기 Button",
 };
 
-// ---------- lucide 아이콘 → SVG ----------
-const ICON_NAMES = ["user", "bell", "eye", "wallet", "arrow-left-right", "banknote", "smartphone", "receipt", "piggy-bank", "credit-card", "chart-column", "users", "house", "search", "mail", "settings"];
+// ---------- lucide 아이콘 → SVG (design.pen의 icon 노드가 쓰는 이름만) ----------
 const iconsDir = path.join(ROOT, "node_modules", "lucide-react-native", "dist", "esm", "icons");
-const icons = {};
-for (const name of ICON_NAMES) {
-  const src = fs.readFileSync(path.join(iconsDir, `${name}.mjs`), "utf8");
+function loadLucideIcon(name) {
+  const file = path.join(iconsDir, `${name}.mjs`);
+  if (!fs.existsSync(file)) throw new Error(`lucide 아이콘을 찾을 수 없습니다: ${name}`);
+  const src = fs.readFileSync(file, "utf8");
   const m = src.match(/createLucideIcon\("[^"]+",\s*(\[[\s\S]*?\])\);/);
   if (!m) throw new Error(`아이콘 파싱 실패: ${name}`);
   const nodes = new Function(`return ${m[1]}`)();
@@ -98,11 +98,104 @@ for (const name of ICON_NAMES) {
       return `<${tag} ${attrText}/>`;
     })
     .join("");
-  icons[name] = `<svg xmlns="http://www.w3.org/2000/svg" width="__SIZE__" height="__SIZE__" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="__SIZE__" height="__SIZE__" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
 }
+
+// ---------- design.pen → 화면 12개 (킷 10 + 구현 기준 home·home/dark) ----------
+// design.pen은 평문 JSON이다. 최상위 프레임을 id로 찾아 서브트리를 그대로 심고, 플러그인의 buildPenNode가 Figma 노드로 변환한다.
+// 색 변수(`$primary` …)는 치환하지 않고 남겨 플러그인이 Figma 변수에 바인딩하게 하고, 숫자·문자열 변수는 값으로 치환한다.
+const PEN_PATH = path.join(ROOT, "design.pen");
+const SCREEN_IDS = [
+  "aXqux", "ACqgw", "Snfjp", "h6Ziyl", "wV0pm", // 킷: Sign in, Sign up #1·#2, Forgot password #1·#2
+  "QvgnZ", "vbpej", "jiH3j", "Fo8cc", "CbQy2", // 킷: Forgot password #3·#4, Change password #1·#2, Home
+  "ClQlB", "DyDYf", // 구현 기준: home, home/dark (변수 참조·auto-layout·lucide 아이콘)
+];
+const pen = JSON.parse(fs.readFileSync(PEN_PATH, "utf8"));
+const penTop = new Map(pen.children.map((n) => [n.id, n]));
+
+// 서체 원천은 tokens.json이다. Pencil의 `$font-sans`는 캔버스 렌더용 대체값일 수 있으므로 토큰 값(Pretendard)으로 치환한다.
+const fontSansToken = (tokens.primitive?.fontFamily?.sans ?? tokens.semantic?.fontFamily?.sans)?.$value;
+if (typeof fontSansToken !== "string") throw new Error("tokens.json에서 fontFamily.sans 토큰을 찾을 수 없습니다");
+const FONT_SANS = resolve(fontSansToken);
+
+function penVariable(name) {
+  if (name === "font-sans") return FONT_SANS;
+  const def = pen.variables?.[name];
+  if (Array.isArray(def.value)) {
+    const light = def.value.find((v) => !v.theme || v.theme.mode === "light") ?? def.value[0];
+    return light.value;
+  }
+  return def.value;
+}
+// `$name`은 그 이름의 문서 변수가 있을 때만 치환한다(`$3.469.52` 같은 텍스트 내용은 그대로 둔다). 색 변수는 참조를 유지한다.
+function resolvePen(value, depth = 0) {
+  if (depth > 10) throw new Error(`design.pen 변수 참조가 너무 깊습니다: ${JSON.stringify(value)}`);
+  if (typeof value === "string" && value.startsWith("$") && pen.variables?.[value.slice(1)]) {
+    if (pen.variables[value.slice(1)].type === "color") return value;
+    return resolvePen(penVariable(value.slice(1)), depth + 1);
+  }
+  if (Array.isArray(value)) return value.map((v) => resolvePen(v, depth + 1));
+  if (value && typeof value === "object") {
+    const out = {};
+    for (const [k, v] of Object.entries(value)) out[k] = resolvePen(v, depth + 1);
+    return out;
+  }
+  return value;
+}
+const round = (v) => (typeof v === "number" ? Math.round(v * 1000) / 1000 : v);
+// 플러그인에 필요한 속성만 남기고 값은 소수 3자리로 줄인다.
+const KEEP = [
+  "type", "id", "name", "x", "y", "width", "height", "rotation", "flipX", "flipY", "opacity", "enabled", "clip",
+  "fill", "stroke", "strokeWidth", "strokeAlignment", "strokeLinecap", "strokeLinejoin", "effect", "cornerRadius",
+  "geometry", "fillRule", "viewBox", "innerRadius", "startAngle", "sweepAngle",
+  "content", "textGrowth", "fontFamily", "fontSize", "fontWeight", "fontStyle", "lineHeight", "letterSpacing", "textAlign", "textAlignVertical", "underline", "strikethrough",
+  "layout", "gap", "padding", "justifyContent", "alignItems", "layoutPosition", "theme", "library", "icon",
+];
+function compactPen(node) {
+  const out = {};
+  for (const key of KEEP) {
+    if (node[key] === undefined) continue;
+    let v = ["content", "name", "geometry", "id"].includes(key) ? node[key] : resolvePen(node[key]);
+    if (key === "rotation" && Math.abs(v) < 0.001) continue;
+    if (typeof v === "number") v = round(v);
+    else if (Array.isArray(v)) v = v.map(round);
+    out[key] = v;
+  }
+  if (node.type === "ref") throw new Error(`컴포넌트 인스턴스(ref)는 지원하지 않습니다: ${node.id}`);
+  if (node.children) out.children = node.children.map(compactPen);
+  return out;
+}
+const penScreens = SCREEN_IDS.map((id) => {
+  const node = penTop.get(id);
+  if (!node) throw new Error(`design.pen 최상위에서 화면을 찾을 수 없습니다: ${id}`);
+  return compactPen(node);
+});
+// Pencil 캔버스 좌표를 그대로 옮기되 원점만 화면들의 좌상단으로 맞춘다
+const origin = { x: Math.min(...penScreens.map((s) => s.x)), y: Math.min(...penScreens.map((s) => s.y)) };
+for (const s of penScreens) {
+  s.x = round(s.x - origin.x);
+  s.y = round(s.y - origin.y);
+}
+const penNodeCount = (n) => 1 + (n.children ?? []).reduce((acc, c) => acc + penNodeCount(c), 0);
+const icons = {};
+const collectIcons = (n) => {
+  if (n.type === "icon") {
+    if (n.library !== "lucide") throw new Error(`lucide 외 아이콘 라이브러리는 지원하지 않습니다: ${n.library}/${n.icon} (${n.id})`);
+    icons[n.icon] ??= loadLucideIcon(n.icon);
+  }
+  for (const c of n.children ?? []) collectIcons(c);
+};
+penScreens.forEach(collectIcons);
+const SCREENS = { source: "design.pen", screens: penScreens };
 
 const TOKENS = { colors, typography, radius: dims(tokens.semantic.radius), size: dims(tokens.semantic.size), samples };
 const template = fs.readFileSync(path.join(__dirname, "code.template.js"), "utf8");
-const code = template.replace("__TOKENS__", JSON.stringify(TOKENS, null, 2)).replace("__ICONS__", JSON.stringify(icons, null, 2));
+const code = template
+  .replace("__TOKENS__", JSON.stringify(TOKENS, null, 2))
+  .replace("__ICONS__", JSON.stringify(icons, null, 2))
+  .replace("__SCREENS__", JSON.stringify(SCREENS));
 fs.writeFileSync(path.join(__dirname, "code.js"), code);
-console.log(`생성: scripts/figma/code.js (색 ${Object.keys(colors.light).length} × ${MODES.length}모드, 타이포 ${Object.keys(typography).length}, 아이콘 ${ICON_NAMES.length})`);
+const totalNodes = penScreens.reduce((acc, s) => acc + penNodeCount(s), 0);
+console.log(
+  `생성: scripts/figma/code.js (색 ${Object.keys(colors.light).length} × ${MODES.length}모드, 타이포 ${Object.keys(typography).length}, 아이콘 ${Object.keys(icons).length}, 화면 ${penScreens.length}개 · 노드 ${totalNodes}개, ${Math.round(code.length / 1024)}KB)`
+);
