@@ -1,16 +1,17 @@
 # 디자인 스펙 (DESIGN.md)
 
 > 이 문서는 UI 작업의 **원천 문서**다. 값의 원천은 `design/tokens.json`이며, 이 문서는 그 값을 어떤 의도로 쓰는지 설명한다.
-> 디자인 톤·컴포넌트 스타일은 **아직 확정되지 않았다.** 아래 값은 하네스 데이터(`ui-ux-pro-max/data/colors.csv` #42 Banking/Traditional Finance, `typography.csv` #31 Financial Trust)를 기반으로 한 **초안**이며, `design.pen`에서 Figma 플러그인으로 불러온 디자인이 확정되면 `figma-sync` 스킬이 이 문서와 `tokens.json`을 갱신한다.
+> 2026-08-30 `design.pen`에 붙여넣은 Figma UI 킷(보라 `#3629B7` primary, Poppins, radius 15, 화면 10개)에서 값을 추출해 `tokens.json`에 반영했다. Figma Variables는 아직 없어 `figma-sync`로 동기화하지 않았다(`$source.lastSyncedAt: null`, `pencilImportedAt: 2026-08-30`). 사용자 결정(2026-08-30): 입금 green/출금 red 유지, Pretendard 유지, positive 킷 값 그대로, 다크 모드는 파생, CTA 56 유지, 모서리는 킷 그대로.
 >
-> 상태: **초안 (Figma 미동기화)** — `$source.lastSyncedAt: null`
+> 상태: **킷 반영 (Pencil 기준, Figma Variables 미동기화)**
 
-## 1. 제품 성격과 디자인 톤 (초안)
+## 1. 제품 성격과 디자인 톤
 
 - 도메인: 모바일 핀테크(계좌 조회, 이체, 결제, 인증). 사용자는 돈을 다루므로 **신뢰·정확·차분함**이 최우선이다.
 - 톤 키워드: 신뢰(Trust), 명료(Clarity), 절제(Restraint). 화려함보다 정보의 정확한 위계.
-- 무드: 라이트 모드는 흰 카드 + 아주 옅은 slate 캔버스, 다크 모드는 navy(`slate-950`) 캔버스 + `slate-900` 카드. 순수 검정(`#000`) 배경은 쓰지 않는다.
-- 포인트 컬러는 브랜드 블루 하나(`primary`). 골드(`highlight`)는 프리미엄 등급·혜택 강조에 한 화면당 한 곳만.
+- 무드(킷): 라이트 모드는 **흰 캔버스 + 흰 카드(옅은 보라 그림자)**, 옅은 보라(`muted` `#F2F1F9`)로 입력·비활성 영역 구분. 다크 모드는 킷에 없어 보라 톤 navy(`night` 스케일)로 파생 `[확인]`. 순수 검정(`#000`) 배경은 쓰지 않는다.
+- 포인트 컬러는 브랜드 퍼플 하나(`primary` `#3629B7`). 오렌지(`highlight` `#FB6B18`)는 강조에 한 화면당 한 곳만. 카테고리 아이콘은 킷처럼 `primary`·`destructive`·`info`·`warning`·`positive`·`highlight`를 섞어 쓴다.
+- 계좌 카드는 `bg-primary` 위 흰 텍스트의 단색 사각형(킷 Card Bank의 장식 원은 붙여넣기에서 깨져 사용하지 않음 — 사용자 결정 2026-08-30).
 - 그라데이션, 글래스모피즘, 장식용 일러스트는 온보딩·이벤트 배너 외에는 쓰지 않는다.
 - 아이콘은 `lucide-react-native` 단일 세트, `components/ui/icon.tsx`의 `Icon`으로 감싸 className을 적용한다. 이모지 아이콘 금지.
 
@@ -33,7 +34,7 @@
 | 입금·수익·성공 | `positive` / `positive-foreground` / `positive-muted` | `text-positive`, 배지 `bg-positive-muted text-positive` |
 | 경고 | `warning` / `warning-foreground` / `warning-muted` | `text-warning` |
 | 정보 | `info` / `info-foreground` / `info-muted` | `bg-info-muted text-info` |
-| 프리미엄·혜택 골드 | `highlight` / `highlight-foreground` | `text-highlight` |
+| 강조 오렌지 | `highlight` / `highlight-foreground` | `text-highlight` |
 | 토스트·툴팁 | `inverse` / `inverse-foreground` | `bg-inverse text-inverse-foreground` |
 | 테두리 | `border` | `border-border` |
 | 입력 테두리 | `input` | `border-input` (RNR `Input`) |
@@ -42,7 +43,8 @@
 
 ### 금액 부호 색상 (명시 규칙)
 
-- 이 프로젝트에서 **입금/수익 = `positive`(green), 출금/손실 = `destructive`(red)** 로 고정한다.
+- 이 프로젝트에서 **입금/수익 = `positive`(green), 출금/손실 = `destructive`(red)** 로 고정한다. 킷은 입금·출금 모두 빨강을 쓰지만 따르지 않는다(사용자 결정 2026-08-30).
+- `positive` `#52D5BA`는 흰 배경 텍스트 대비가 약 2:1로 낮다. 킷 값 그대로 쓰기로 했으므로(2026-08-30) 금액 부호·텍스트를 항상 함께 두어 색에만 의존하지 않는다.
 - 증권 시세(상승 빨강·하락 파랑)의 한국 관례를 따라야 하는 화면이 생기면 별도 토큰(`up`/`down`)을 Figma에서 추가한 뒤 동기화한다. 기존 토큰의 의미를 바꾸지 않는다.
 - 색만으로 의미를 전달하지 않는다. 금액 앞에 `+`/`-` 부호 또는 "입금"/"출금" 텍스트를 항상 함께 둔다.
 
@@ -55,7 +57,8 @@
 
 - 서체: **Pretendard** 단일 패밀리. `app.json`의 `expo-font` 플러그인으로 등록되어 있으며(`assets/fonts/Pretendard-{Regular,Medium,SemiBold,Bold}.otf`) Android는 `fontDefinitions`로 weight가 매핑되어 `fontWeight`만으로 굵기 파일이 선택된다. **개발 빌드(`expo prebuild`/EAS)에서 적용되며 Expo Go에서는 시스템 폰트로 폴백**된다.
 - `components/ui/text.tsx`의 `Text`가 기본 클래스에 `font-sans`를 포함하므로 모든 텍스트는 이 `Text`를 사용한다. React Native `Text`를 직접 쓰지 않는다.
-- 가중치: 400(본문), 500(라벨), 600(제목·버튼·금액), 700(디스플레이·큰 금액). 세 단계 이상을 한 컴포넌트에 섞지 않는다.
+- 서체 크기·굵기·행간은 킷 Text style(Poppins)의 값을 Pretendard에 그대로 적용한다(Poppins는 한글 미지원).
+- 가중치: 400(본문), 500(라벨·캡션·버튼), 600(제목·금액), 700(디스플레이·큰 금액). 세 단계 이상을 한 컴포넌트에 섞지 않는다.
 - 금액과 숫자 열은 항상 `tabular-nums` 클래스를 함께 쓴다.
 - 한글 제목은 `letterSpacing` 음수(-0.3 ~ -0.5). 본문은 0.
 - 최소 크기 12pt. 본문 기본 16pt.
@@ -69,22 +72,22 @@
 | `text-amount-lg` | 36/44 tabular | 700 | 잔액, 이체 금액 입력 |
 | `text-amount-md` | 24/32 tabular | 600 | 카드 내 잔액 |
 | `text-amount-sm` | 16/24 tabular | 600 | 거래 목록 금액 |
-| `text-h1` | 24/32 | 600 | 화면 제목 |
-| `text-h2` | 20/28 | 600 | 섹션 제목 |
-| `text-h3` | 18/26 | 600 | 카드 제목 |
+| `text-h1` | 24/28 | 600 | 화면 제목 (킷 Title 1) |
+| `text-h2` | 20/28 | 600 | 섹션 제목 (킷 Title 2) |
+| `text-h3` | 16/24 | 600 | 카드 제목 (킷 Title 3) |
 | `text-body-lg` | 18/28 | 400 | 강조 본문 |
-| `text-body` | 16/24 | 400 | 기본 본문 |
-| `text-body-sm` | 14/20 | 400 | 보조 설명 |
-| `text-label` | 14/20 | 500 | 입력 라벨, 탭 |
-| `text-caption` | 12/16 | 400 | 날짜, 법적 고지 |
-| `text-button` | 16/24 | 600 | 버튼 |
+| `text-body` | 16/24 | 400 | 기본 본문 (킷 Body 2) |
+| `text-body-sm` | 14/21 | 400 | 보조 설명 |
+| `text-label` | 14/21 | 500 | 입력 라벨, 탭, 카테고리명 (킷 Body 3) |
+| `text-caption` | 12/16 | 500 | 날짜, 상태, 법적 고지 (킷 Caption 2) |
+| `text-button` | 16/24 | 500 | 버튼 (킷 Button 라벨) |
 
 ## 4. 간격 · 형태 · 크기
 
 - 4px 그리드(Tailwind 기본 스케일). 화면 좌우 패딩 `px-5`(20). 카드 내부 `p-4`(16). 섹션 간격 `gap-6`(24).
-- 모서리: 배지 `rounded-sm`(6), 입력·버튼 `rounded-md`(10), 다이얼로그·목록 그룹 `rounded-lg`(14), 카드·시트 `rounded-xl`(20).
-- 그림자: iOS/Android 차이가 커서 `shadow-sm`까지만. 다크 모드에서는 그림자 대신 `border-border`.
-- 터치 타깃 최소 44pt(`min-h-touch min-w-touch`). 주요 CTA 높이 `h-button-lg`(56), 일반 버튼 `h-button-md`(48), 입력 `h-input`(52).
+- 모서리(킷): 배지 `rounded-sm`(6), 거래 행 아이콘 타일 `rounded-md`(10), **버튼·입력·카드·금액 칩·탭 `rounded-lg`(15)**, 바텀시트 `rounded-xl`(20). RNR `Button`·`Input`·`Card` 기본 클래스는 벤더 원본을 유지하므로 화면에서 `className="rounded-lg"`로 덮어쓴다.
+- 그림자(킷 `shadow.card`: 0/4, blur 30, `primary` 7%): 산출물에 아직 없어 `shadow-sm shadow-black/5`로 근사한다. 다크 모드에서는 그림자 대신 `border-border`.
+- 터치 타깃 최소 44pt(`min-h-touch min-w-touch`). 주요 CTA 높이 `h-button-lg`(56, 사용자 결정), 일반 버튼 `h-button-md`(44, 킷), 입력 `h-input`(44, 킷). 아이콘 `w-icon`(24) `w-icon-sm`(20) `w-icon-lg`(28, 카테고리), 아이콘 타일 `w-icon-tile`(40), 아바타 `w-avatar`(50).
 - 모션: `duration-fast/base/slow` = 150/220/320ms. 화면 전환은 플랫폼 기본. 금액 카운트업 같은 장식 애니메이션은 쓰지 않는다.
 
 ## 5. 컴포넌트 인벤토리
@@ -115,7 +118,8 @@
 | `Toast` | `components/ui/toast.tsx` | — | `info` `success` `error`, `bg-inverse` |
 | `BottomSheet` | `components/ui/bottom-sheet.tsx` | `Dialog` 또는 별도 | `bg-popover` |
 | `ListGroup` | `components/ui/list-group.tsx` | `Separator` | 설정·메뉴 목록 |
-| `AccountCard` | `features/account/components/AccountCard.tsx` | `Card` | `default` `selected` |
+| `TabBar` | `components/ui/tab-bar.tsx` | `Pressable`, `Icon` | 킷 `Tab bar / *` — 활성 탭은 `bg-primary rounded-full` 알약 + 라벨, 비활성은 `text-muted-foreground` 아이콘. `app/(tabs)/_layout.tsx`의 `tabBar` |
+| `AccountCard` | `features/account/components/AccountCard.tsx` | `View`(`bg-primary rounded-lg`) | `default` `selected` — 킷 `Card Bank / 1`을 단색 사각형으로 |
 | `TransactionRow` | `features/account/components/TransactionRow.tsx` | `Text`, `Badge` | `deposit` `withdrawal` `pending` |
 | `PinPad` | `features/auth/components/PinPad.tsx` | `Button` | 6자리, 셔플 옵션 |
 
@@ -124,7 +128,8 @@
 ## 6. 화면 패턴
 
 - 화면 제목은 `text-h1` 하나. 뒤로가기는 플랫폼 기본 헤더 또는 좌상단 아이콘 버튼(`accessibilityLabel="뒤로"`).
-- 하단 탭은 최대 5개. 이체·결제 같은 핵심 액션은 탭이 아니라 홈 상단 CTA.
+- 하단 탭은 킷 기준 4개(홈·검색·메시지·설정, `TabBar`). 이체·결제 같은 핵심 액션은 탭이 아니라 홈 카테고리 그리드.
+- 홈 헤더는 `bg-primary` 위에 흰 아바타 원(`w-avatar bg-white`)·인사말·알림 벨(흰색, 배지 `bg-destructive`). 헤더 아래 흰 본문, 계좌 카드 뒤에 `destructive`·`primary/60` 사각형 2장이 8pt씩 보이는 멀티 카드 스택(킷 `Card Bank / Multi`). 카테고리 타일 3열, 간격 16.
 - 이체 플로우는 `받는 사람 → 금액 → 확인 → 인증(PIN/생체) → 완료`의 5단계를 넘지 않는다. 확인 화면은 금액을 `text-amount-lg`로, 받는 사람·계좌를 마스킹해 표시한다.
 - 로딩은 스피너보다 `Skeleton`. 1초 이상 걸리는 작업에만 진행 표시.
 - 오류는 필드 근처에 원인 + 해결 방법. 재시도 버튼은 중복 요청을 막는다.
@@ -134,8 +139,9 @@
 
 | 항목 | 값 |
 |---|---|
-| Pencil 작업 파일 | `design.pen` (Figma 플러그인으로 불러올 예정) |
-| Figma 파일 | TBD |
-| Variables 컬렉션 | TBD |
-| 마지막 동기화 | 없음 |
+| Pencil 작업 파일 | `design.pen` — 2026-08-30 Figma UI 킷 붙여넣기(킷 원본 프레임 17개 유지) + 토큰 기준 `Color style / tokens`·`Text style / tokens` 프레임, 구현 기준 아트보드 `home`·`home/dark`. 문서 변수 = 시맨틱 토큰(라이트/다크), 서체는 Pencil에 Pretendard가 없어 `$font-sans` = Noto Sans KR 대체 |
+| Figma 파일 | TBD (킷 원본 URL 미기록) |
+| Variables 컬렉션 | 없음 — 킷은 스타일 프레임만 제공. Figma Variables 생성 후 `figma-sync` 필요 |
+| 마지막 동기화 | Pencil 추출 2026-08-30 (`$source.pencilImportedAt`). Figma Variables 동기화 없음 |
 | 동기화 담당 | `.agents/skills/figma-sync/SKILL.md` |
+| Figma 가져오기 | `scripts/figma/` 로컬 플러그인(`pnpm figma:build` → Figma 데스크톱 `Import plugin from manifest…`). tokens.json → Variables·Styles, `home`·`home/dark` 프레임 생성 |

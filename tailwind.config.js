@@ -54,7 +54,7 @@ module.exports = {
       "none": "0px",
       "sm": "6px",
       "md": "10px",
-      "lg": "14px",
+      "lg": "15px",
       "xl": "20px",
       "2xl": "24px",
       "3xl": "32px",
@@ -100,7 +100,7 @@ module.exports = {
         "h1": [
           "24px",
           {
-            "lineHeight": "32px",
+            "lineHeight": "28px",
             "letterSpacing": "-0.3px",
             "fontWeight": "600"
           }
@@ -114,9 +114,9 @@ module.exports = {
           }
         ],
         "h3": [
-          "18px",
+          "16px",
           {
-            "lineHeight": "26px",
+            "lineHeight": "24px",
             "letterSpacing": "-0.2px",
             "fontWeight": "600"
           }
@@ -140,7 +140,7 @@ module.exports = {
         "body-sm": [
           "14px",
           {
-            "lineHeight": "20px",
+            "lineHeight": "21px",
             "letterSpacing": "0px",
             "fontWeight": "400"
           }
@@ -148,7 +148,7 @@ module.exports = {
         "label": [
           "14px",
           {
-            "lineHeight": "20px",
+            "lineHeight": "21px",
             "letterSpacing": "0px",
             "fontWeight": "500"
           }
@@ -158,7 +158,7 @@ module.exports = {
           {
             "lineHeight": "16px",
             "letterSpacing": "0px",
-            "fontWeight": "400"
+            "fontWeight": "500"
           }
         ],
         "button": [
@@ -166,41 +166,53 @@ module.exports = {
           {
             "lineHeight": "24px",
             "letterSpacing": "0px",
-            "fontWeight": "600"
+            "fontWeight": "500"
           }
         ]
       },
       height: {
         "touch": "44px",
         "button-lg": "56px",
-        "button-md": "48px",
-        "input": "52px",
+        "button-md": "44px",
+        "input": "44px",
         "icon": "24px",
-        "icon-sm": "20px"
+        "icon-sm": "20px",
+        "icon-lg": "28px",
+        "icon-tile": "40px",
+        "avatar": "50px"
       },
       minHeight: {
         "touch": "44px",
         "button-lg": "56px",
-        "button-md": "48px",
-        "input": "52px",
+        "button-md": "44px",
+        "input": "44px",
         "icon": "24px",
-        "icon-sm": "20px"
+        "icon-sm": "20px",
+        "icon-lg": "28px",
+        "icon-tile": "40px",
+        "avatar": "50px"
       },
       minWidth: {
         "touch": "44px",
         "button-lg": "56px",
-        "button-md": "48px",
-        "input": "52px",
+        "button-md": "44px",
+        "input": "44px",
         "icon": "24px",
-        "icon-sm": "20px"
+        "icon-sm": "20px",
+        "icon-lg": "28px",
+        "icon-tile": "40px",
+        "avatar": "50px"
       },
       width: {
         "touch": "44px",
         "button-lg": "56px",
-        "button-md": "48px",
-        "input": "52px",
+        "button-md": "44px",
+        "input": "44px",
         "icon": "24px",
-        "icon-sm": "20px"
+        "icon-sm": "20px",
+        "icon-lg": "28px",
+        "icon-tile": "40px",
+        "avatar": "50px"
       },
       transitionDuration: {
         "fast": "150ms",
