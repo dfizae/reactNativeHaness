@@ -2,6 +2,8 @@
 
 `design/tokens.json`과 `design.pen`(킷 화면 10개 + 구현 기준 `home`·`home/dark`)을 Figma에 **편집 가능한 노드·변수·스타일**로 재현하는 Figma Plugin API 스크립트다. 커뮤니티 플러그인 없이, Starter 플랜의 내 파일(편집 권한)에서 동작한다.
 
+> **역할**: Pencil(`design.pen`) → Figma **한 방향 내보내기**. 공유·열람용 출력물이며, 코드 구현·대조·토큰의 원천은 Pencil이다(`AGENTS.md` 디자인 원천 절, 규칙 70). Figma에서 고친 내용은 코드로 돌아오지 않는다 — 고칠 것은 Pencil에서 고치고 다시 빌드한다.
+
 ## 파일
 - `build-plugin.cjs` — 생성기. `tokens.json`(색 35 × light/dark, 타이포 13, 반경, 크기)과 `design.pen`의 화면 12개 서브트리(`SCREEN_IDS`), 그 화면들이 쓰는 lucide 아이콘 SVG를 읽어 `code.js`를 만든다. `pnpm figma:build`
 - `code.template.js` — 플러그인 본문 템플릿. Foundations 프레임 빌더와 `design.pen` 범용 변환기(`buildPenNode`)가 여기 있다. 화면은 전부 `design.pen`에서 오므로 화면을 고치려면 Pencil에서 고치고 다시 빌드한다
@@ -54,4 +56,4 @@
 플러그인은 기존 변수·스타일을 갱신하지 않고 **새로 만든다**. 다시 실행하기 전에 이전 결과(페이지·변수·스타일)를 지우거나 새 파일에서 실행한다.
 
 ## 실행 후
-생성된 프레임 URL(`Copy link`)을 `design/figma-map.json`의 `screens.*.url`, `components.*.url`, `pencil.figmaExport.*.url`에 기록하고, Variables가 생겼으므로 `figma-sync` 스킬로 `tokens.json`의 `$source.figmaFileKey`를 채운다.
+필요하면 생성된 프레임 URL(`Copy link`)을 `design/design-map.json`의 `figmaExport.*`에 `url` 필드로 남겨 둔다(공유용 참고, 필수 아님). 코드·토큰 쪽에는 반영할 것이 없다.

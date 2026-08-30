@@ -40,11 +40,6 @@
       "note": "브랜드 가이드라인 템플릿·참조만 유지. 웹 CLI 스크립트는 제거(2026-08-29).",
       "hashOf": "SKILL.md (after project trim)"
     },
-    "figma-sync": {
-      "source": "project",
-      "sourceType": "local",
-      "skillPath": ".agents/skills/figma-sync/SKILL.md"
-    },
     "pencil-design": {
       "source": "project",
       "sourceType": "local",

@@ -37,7 +37,7 @@ metadata:
 
 ## 구현 순서 (화면 하나 기준)
 
-1. `design/figma-map.json`에서 노드 확인 → 있으면 `figma-sync` 절차 D로 대조.
+1. `design/design-map.json`에서 Pencil 노드 확인 → 있으면 `pencil-design` 절차 B로 대조, `없음`이면 `DESIGN.md` 기준 + "Pencil 미대조" 표시.
 2. `references/patterns.md`에서 해당 패턴의 체크리스트를 읽는다.
 3. 화면 모델(`features/<domain>/model.ts`)과 Query/Mutation 훅을 먼저 정의한다(`20-api-data.md`).
 4. 공용 컴포넌트가 없으면 `components/ui/`에 인벤토리 이름으로 만든다.

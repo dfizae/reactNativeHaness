@@ -1,9 +1,9 @@
 # 디자인 스펙 (DESIGN.md)
 
 > 이 문서는 UI 작업의 **원천 문서**다. 값의 원천은 `design/tokens.json`이며, 이 문서는 그 값을 어떤 의도로 쓰는지 설명한다.
-> 2026-08-30 `design.pen`에 붙여넣은 Figma UI 킷(보라 `#3629B7` primary, Poppins, radius 15, 화면 10개)에서 값을 추출해 `tokens.json`에 반영했다. Figma Variables는 아직 없어 `figma-sync`로 동기화하지 않았다(`$source.lastSyncedAt: null`, `pencilImportedAt: 2026-08-30`). 사용자 결정(2026-08-30): 입금 green/출금 red 유지, Pretendard 유지, positive 킷 값 그대로, 다크 모드는 파생, CTA 56 유지, 모서리는 킷 그대로.
+> 2026-08-30 `design.pen`에 붙여넣은 Figma UI 킷(보라 `#3629B7` primary, Poppins, radius 15, 화면 10개)에서 값을 추출해 `tokens.json`에 반영했다. 2026-08-30 저녁 **Pencil(`design.pen`)을 단일 확정 원천으로 확정** — 토큰은 Pencil 문서 변수에서 `scripts/sync-pen-tokens.cjs`로 동기화하고(`$source.pencilSyncedAt`), Figma는 `pnpm figma:build` 출력물일 뿐 코드가 읽지 않는다. 사용자 결정(2026-08-30): 입금 green/출금 red 유지, Pretendard 유지, positive 킷 값 그대로, 다크 모드는 파생, CTA 56 유지, 모서리는 킷 그대로.
 >
-> 상태: **킷 반영 (Pencil 기준, Figma Variables 미동기화)**
+> 상태: **킷 반영 · Pencil 단일 원천 (design.pen 변수 ↔ tokens.json 동기화 검사 중)**
 
 ## 1. 제품 성격과 디자인 톤
 
@@ -45,7 +45,7 @@
 
 - 이 프로젝트에서 **입금/수익 = `positive`(green), 출금/손실 = `destructive`(red)** 로 고정한다. 킷은 입금·출금 모두 빨강을 쓰지만 따르지 않는다(사용자 결정 2026-08-30).
 - `positive` `#52D5BA`는 흰 배경 텍스트 대비가 약 2:1로 낮다. 킷 값 그대로 쓰기로 했으므로(2026-08-30) 금액 부호·텍스트를 항상 함께 두어 색에만 의존하지 않는다.
-- 증권 시세(상승 빨강·하락 파랑)의 한국 관례를 따라야 하는 화면이 생기면 별도 토큰(`up`/`down`)을 Figma에서 추가한 뒤 동기화한다. 기존 토큰의 의미를 바꾸지 않는다.
+- 증권 시세(상승 빨강·하락 파랑)의 한국 관례를 따라야 하는 화면이 생기면 별도 토큰(`up`/`down`)을 Pencil 변수에 추가한 뒤 동기화한다. 기존 토큰의 의미를 바꾸지 않는다.
 - 색만으로 의미를 전달하지 않는다. 금액 앞에 `+`/`-` 부호 또는 "입금"/"출금" 텍스트를 항상 함께 둔다.
 
 ### 라이트/다크
@@ -108,9 +108,9 @@
 | `icon.tsx` | `Icon` | lucide 아이콘 래퍼, `className`으로 색·크기 |
 | `dialog.tsx` | `Dialog`, `DialogTrigger`, `DialogContent`, … | 루트 레이아웃의 `PortalHost` 필요(설정됨) |
 
-### 5-2. 프로젝트 전용 (Figma 컴포넌트명 = 코드명)
+### 5-2. 프로젝트 전용 (Pencil 컴포넌트명 = 코드명)
 
-| Figma 컴포넌트 | 코드 | 기반 | variant / size |
+| Pencil 컴포넌트 | 코드 | 기반 | variant / size |
 |---|---|---|---|
 | `AmountText` | `components/ui/amount-text.tsx` | `Text` | `lg` `md` `sm`, `sign` |
 | `AmountInput` | `components/ui/amount-input.tsx` | `Input` | 통화 `KRW` 고정, 콤마 포맷 |
@@ -123,7 +123,7 @@
 | `TransactionRow` | `features/account/components/TransactionRow.tsx` | `Text`, `Badge` | `deposit` `withdrawal` `pending` |
 | `PinPad` | `features/auth/components/PinPad.tsx` | `Button` | 6자리, 셔플 옵션 |
 
-컴포넌트가 아직 코드에 없으면 위 이름과 variant를 그대로 사용해 만든다. 이름을 바꿔야 하면 Figma를 먼저 바꾸고 이 표를 동기화한다.
+컴포넌트가 아직 코드에 없으면 위 이름과 variant를 그대로 사용해 만든다. 이름을 바꿔야 하면 Pencil을 먼저 바꾸고 이 표와 `design-map.json`을 동기화한다.
 
 ## 6. 화면 패턴
 
@@ -135,13 +135,13 @@
 - 오류는 필드 근처에 원인 + 해결 방법. 재시도 버튼은 중복 요청을 막는다.
 - 민감 정보(계좌번호 전체, 카드번호)는 기본 마스킹, 명시적 "보기" 액션으로만 노출.
 
-## 7. 동기화 섹션 (figma-sync가 갱신)
+## 7. 동기화 섹션 (Pencil이 원천 — `pencil-design` 절차 C가 갱신)
 
 | 항목 | 값 |
 |---|---|
-| Pencil 작업 파일 | `design.pen` — 2026-08-30 Figma UI 킷 붙여넣기(킷 원본 프레임 17개 유지) + 토큰 기준 `Color style / tokens`·`Text style / tokens` 프레임, 구현 기준 아트보드 `home`·`home/dark`. 문서 변수 = 시맨틱 토큰(라이트/다크), `$font-sans` = Pretendard(2026-08-30 교체. Pencil은 Google 폰트만 렌더하므로 캔버스에서는 폴백 서체로 보이고, Figma 이관 시 `tokens.json`의 `fontFamily`(Pretendard)로 치환된다) |
-| Figma 파일 | TBD (킷 원본 URL 미기록) |
-| Variables 컬렉션 | 없음 — 킷은 스타일 프레임만 제공. Figma Variables 생성 후 `figma-sync` 필요 |
-| 마지막 동기화 | Pencil 추출 2026-08-30 (`$source.pencilImportedAt`). Figma Variables 동기화 없음 |
-| 동기화 담당 | `.agents/skills/figma-sync/SKILL.md` |
-| Figma 가져오기 | `scripts/figma/` 로컬 플러그인(`pnpm figma:build` → Figma 데스크톱 `Import plugin from manifest…`). tokens.json → Variables·Styles, `home`·`home/dark` 프레임 생성 |
+| 확정 원천 | `design.pen`(Pencil) — 2026-08-30 Figma UI 킷 붙여넣기(킷 원본 프레임 17개는 참고 자료) + 토큰 기준 `Color style / tokens`·`Text style / tokens` 프레임, 구현 기준 아트보드 `home`·`home/dark`. 문서 변수 51개 = 시맨틱 색 35(라이트/다크) + white/black + radius-* + size-* + `$font-sans`(Pretendard — Pencil은 Google 폰트만 렌더해 캔버스는 폴백 서체로 보임) |
+| 토큰 동기화 | `pnpm tokens:sync` = `scripts/sync-pen-tokens.cjs`(design.pen 변수 → tokens.json, 같은 hex는 프리미티브 참조) → `scripts/sync-tokens.cjs`(→ tailwind/global.css/theme.ts). `tokens:check`·`harness:check`·CI가 불일치를 잡는다 |
+| 마지막 동기화 | `tokens.json` `$source.pencilSyncedAt` |
+| 구현 전 대조 | `design/design-map.json`의 Pencil 노드 id → MCP `Get`·`TakeScreenshot` (`pencil-design` 절차 B) |
+| Pencil 변수에 없는 토큰 | `radius.full`, 타이포 13종, 모션, 그림자 — 코드 전용, 승인 후 `tokens.json`에서 직접 관리 |
+| Figma 내보내기(선택) | `scripts/figma/` 로컬 플러그인(`pnpm figma:build` → Figma 데스크톱 `Import plugin from manifest…`). design.pen 화면 12개 + tokens.json → Variables·Styles·프레임. **출력물이며 코드는 Figma를 읽지 않는다** |

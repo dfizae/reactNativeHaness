@@ -11,9 +11,12 @@ echo "▶ .agents/skills ↔ .claude/skills"
 if diff -r .agents/skills .claude/skills >/dev/null; then echo "  OK"; else echo "  FAIL: 미러 불일치 (pnpm harness:sync)"; diff -rq .agents/skills .claude/skills | head -20; fail=1; fi
 
 echo "▶ design/*.json 파싱"
-for f in design/tokens.json design/figma-map.json; do
+for f in design/tokens.json design/design-map.json; do
   if node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" 2>/dev/null; then echo "  OK $f"; else echo "  FAIL: $f 파싱 오류"; fail=1; fi
 done
+
+echo "▶ design.pen ↔ tokens.json (Pencil 변수가 원천)"
+if node scripts/sync-pen-tokens.cjs --check; then :; else fail=1; fi
 
 echo "▶ skills-lock.json 이 모든 스킬을 추적하는지"
 for d in .agents/skills/*/; do
