@@ -50,7 +50,6 @@ pnpm figma:build      # (선택) design.pen 화면 + 토큰 → Figma 로컬 플
 │   └── skills/               #   pencil-design · fintech-ui-patterns (+ 외부 참조 스킬)
 ├── .claude/                  # Claude Code 미러 (rules, skills, settings.json)
 ├── scripts/                  # sync-pen-tokens · sync-tokens · check-tokens · sync-harness · check-harness · hooks/post-edit-check · figma/(Figma 내보내기 플러그인)
-├── .github/workflows/ci.yml  # CI: typecheck · lint · test · tokens · harness
 ├── docs/                     # 코드 품질 기준 (토스 Frontend Fundamentals, Clean Code)
 ├── app/                      # Expo Router 라우트 — 화면 조립만
 ├── features/<domain>/        # account · transfer · auth · payment … (api/, components/, model.ts)
@@ -113,7 +112,7 @@ design.pen (Pencil — 확정 원천: 변수 51개 + 아트보드)
 ## 자동 검사
 
 - **Claude Code 훅** (`.claude/settings.json` → `scripts/hooks/post-edit-check.sh`): `app/ components/ features/ lib/` 편집 후 토큰 위반 검사 자동 실행(위반 시 Claude에게 오류 반환), `design/tokens.json` 편집 후 산출물 재생성, `.agents/` 편집 후 `.claude/` 미러 동기화.
-- **GitHub Actions** (`.github/workflows/ci.yml`): push/PR마다 `typecheck · lint · test · tokens:check · harness:check`. `tokens:check`와 `harness:check`에 `design.pen ↔ tokens.json` 일치 검사가 들어 있어 Pencil을 바꾸고 동기화하지 않으면 실패합니다.
+- **CI 워크플로 없음**(2026-09-01 제거): push 전 검증은 로컬 명령 `typecheck · lint · test · tokens:check · harness:check`로 수행합니다. `tokens:check`와 `harness:check`에 `design.pen ↔ tokens.json` 일치 검사가 들어 있어 Pencil을 바꾸고 동기화하지 않으면 실패합니다.
 
 ## 하네스 유지보수
 
