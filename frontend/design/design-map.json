@@ -71,7 +71,7 @@
       "pencil": "home 아트보드 RoomCard(pvcee) — 캐릭터 미등록 상태"
     },
     "TransactionRow": {
-      "code": "features/account/components/TransactionRow.tsx",
+      "code": "features/assets/components/AssetsScreen.tsx (TransactionsSection)",
       "pencil": "assets 아트보드 TransactionRow (p858a·et92l·U8p2d)"
     },
     "ProgressBar": {
@@ -115,9 +115,10 @@
       "figma": "와이어프레임 초안 / 캐릭터 입주중 (171:6933)"
     },
     "assets": {
-      "route": "app/(tabs)/assets.tsx [제안]",
+      "route": "app/(tabs)/assets.tsx",
       "pencil": "assets (J34JR) — 총자산·계좌/카드/대출 탭·정기결제·최근 거래",
-      "figma": "와이어프레임 초안 / 자산관리 (160:1580)"
+      "figma": "와이어프레임 초안 / 자산관리 (160:1580)",
+      "code": "features/assets/components/AssetsScreen.tsx"
     },
     "budget": {
       "route": "app/(tabs)/budget.tsx [제안]",
