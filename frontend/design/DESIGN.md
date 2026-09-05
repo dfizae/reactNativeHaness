@@ -128,9 +128,9 @@
 ## 6. 화면 패턴
 
 - 화면 제목은 `text-h1` 하나. 뒤로가기는 플랫폼 기본 헤더 또는 좌상단 아이콘 버튼(`accessibilityLabel="뒤로"`).
-- 하단 탭은 킷 기준 4개(홈·검색·메시지·설정, `TabBar`). 이체·결제 같은 핵심 액션은 탭이 아니라 홈 카테고리 그리드.
-- 홈 헤더는 `bg-primary` 위에 흰 아바타 원(`w-avatar bg-white`)·인사말·알림 벨(흰색, 배지 `bg-destructive`). 헤더 아래 흰 본문, 계좌 카드 뒤에 `destructive`·`primary/60` 사각형 2장이 8pt씩 보이는 멀티 카드 스택(킷 `Card Bank / Multi`). 카테고리 타일 3열, 간격 16.
-- 이체 플로우는 `받는 사람 → 금액 → 확인 → 인증(PIN/생체) → 완료`의 5단계를 넘지 않는다. 확인 화면은 금액을 `text-amount-lg`로, 받는 사람·계좌를 마스킹해 표시한다.
+- 하단 탭은 KeyFin 기준 5개(홈·자산·예산·리포트·마이, `KF / TabBar`, lucide house·wallet·calculator·chart-column·user). 활성 탭은 `bg-secondary` 필 + `text-primary`.
+- 홈은 흰 배경 헤더(캡션 인사 + `text-h2` 이름, 캐릭터 활성 시 코인 배지·상점 버튼) 아래 캐릭터 방 이미지 카드(`rounded-2xl`, design/figma-assets/room-*.png)가 본문을 채우고, 하단에 `bg-primary` 남은 예산 카드(금액 `text-amount-md`↑ + `positive` 진행바).
+- 온보딩(자산 연동) 플로우는 `약관 동의 → 내 자산 선택 → 자산 불러오기 결과 → 캐릭터 입주중 → 홈`. 각 화면 하단 고정 CTA(`h-button-lg`, `bg-primary`), 은행 행은 실제 은행 아이콘(figma-assets)과 체크박스.
 - 로딩은 스피너보다 `Skeleton`. 1초 이상 걸리는 작업에만 진행 표시.
 - 오류는 필드 근처에 원인 + 해결 방법. 재시도 버튼은 중복 요청을 막는다.
 - 민감 정보(계좌번호 전체, 카드번호)는 기본 마스킹, 명시적 "보기" 액션으로만 노출.
@@ -139,9 +139,9 @@
 
 | 항목 | 값 |
 |---|---|
-| 확정 원천 | `design.pen`(Pencil) — 2026-08-30 Figma UI 킷 붙여넣기(킷 원본 프레임 17개는 참고 자료) + 토큰 기준 `Color style / tokens`·`Text style / tokens` 프레임, 구현 기준 아트보드 `home`·`home/dark`. 문서 변수 51개 = 시맨틱 색 35(라이트/다크) + white/black + radius-* + size-* + `$font-sans`(Pretendard — Pencil은 Google 폰트만 렌더해 캔버스는 폴백 서체로 보임) |
+| 확정 원천 | `design.pen`(Pencil) — 2026-09-05 KeyFin 디자인(Figma '와이어프레임 초안')으로 전면 교체. 구현 기준 아트보드 10개(`home`, `home/character`, `terms`, `asset-select`, `asset-import-result`, `character-moving-in`, `assets`, `budget`, `report`, `mypage`) + 공용 `KF / StatusBar`·`KF / TabBar`, 이미지 에셋 `design/figma-assets/`. 문서 변수 51개 = 시맨틱 색 35(라이트/다크) + white/black + radius-* + size-* + `$font-sans`(Pretendard — Pencil은 Google 폰트만 렌더해 캔버스는 폴백 서체로 보임) |
 | 토큰 동기화 | `pnpm tokens:sync` = `scripts/sync-pen-tokens.cjs`(design.pen 변수 → tokens.json, 같은 hex는 프리미티브 참조) → `scripts/sync-tokens.cjs`(→ tailwind/global.css/theme.ts). `tokens:check`·`harness:check`·CI가 불일치를 잡는다 |
 | 마지막 동기화 | `tokens.json` `$source.pencilSyncedAt` |
 | 구현 전 대조 | `design/design-map.json`의 Pencil 노드 id → MCP `Get`·`TakeScreenshot` (`pencil-design` 절차 B) |
 | Pencil 변수에 없는 토큰 | `radius.full`, 타이포 13종, 모션, 그림자 — 코드 전용, 승인 후 `tokens.json`에서 직접 관리 |
-| Figma 내보내기(선택) | `scripts/figma/` 로컬 플러그인(`pnpm figma:build` → Figma 데스크톱 `Import plugin from manifest…`). design.pen 화면 12개 + tokens.json → Variables·Styles·프레임. **출력물이며 코드는 Figma를 읽지 않는다** |
+| Figma 내보내기(선택) | `scripts/figma/` 로컬 플러그인(`pnpm figma:build` → Figma 데스크톱 `Import plugin from manifest…`). design.pen KeyFin 화면 10개 + tokens.json → Variables·Styles·프레임. **출력물이며 코드는 Figma를 읽지 않는다** |

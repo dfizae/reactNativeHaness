@@ -2,62 +2,158 @@
   "$description": "화면·컴포넌트 → design.pen(Pencil) 노드 매핑. 디자인의 확정본은 Pencil이다. 화면·컴포넌트를 구현하기 전에 여기서 pencil 노드 id를 찾아 Pencil MCP `Get`(구조·프레임 자체의 fill·좌표)과 `TakeScreenshot`(시각)으로 대조한다. pencil이 '없음'이면 DESIGN.md 기준으로 구현하고 보고서에 'Pencil 미대조'로 표시한다. figma 필드는 `pnpm figma:build`로 내보내는 Figma 프레임 이름(출력물)이며 코드는 Figma를 읽지 않는다.",
   "pencil": {
     "file": "design.pen",
-    "importedAt": "2026-08-30",
-    "note": "Figma UI 킷을 붙여넣은 작업 파일. 킷 원본 프레임(Home, 로그인, Color style, Text style …)은 참고용으로 유지하고, 구현 기준 아트보드는 screens 키 이름(home, home/dark)으로 별도 둔다. 새 화면은 pencil-design 스킬로 그리고 여기에 노드 id를 기록한다.",
-    "tokenFrames": {
-      "colorStyle": "Color style / tokens (J81sgU) — 문서 변수 $<semantic> 라이트/다크 스와치",
-      "textStyle": "Text style / tokens (khZeU) — text-<name> 샘플"
-    },
-    "variables": "문서 변수 51개 = tokens.json semantic.color 35개(mode: light/dark) + white/black + radius-* + size-* + font-sans(Pretendard). scripts/sync-pen-tokens.cjs가 tokens.json으로 동기화하고 tokens:check가 불일치를 잡는다."
+    "importedAt": "2026-09-05",
+    "note": "2026-09-05 KeyFin 디자인(Figma xa7rWgfvEwCLKPlvV6eFQf '와이어프레임 초안')으로 전면 교체. 사용자가 기존 킷·아트보드를 캔버스에서 제거했고(변수 51개는 유지), KeyFin 와이어프레임 10개를 구현 기준 아트보드로 재구축했다. 방·캐릭터·은행 아이콘 이미지는 design/figma-assets/의 실제 Figma 에셋을 이미지 필로 사용한다. 유저 플로우·게이미피케이션 캐릭터 시트는 이관 제외(사용자 결정).",
+    "assets": "design/figma-assets/ — 화면용: room-empty.png, room-character.png, character-cheer.png, bank-kb·shinhan·hana·kakao.png / 참고 보드(Figma 렌더): ref-logo.png, ref-banks-sijung·gukchaek·teuksu·jibang·internet·gita.png",
+    "variables": "문서 변수 51개 = tokens.json semantic.color 35개(mode: light/dark) + white/black + radius-* + size-* + font-sans(Pretendard). KeyFin Figma 변수와 동일 값(2026-09-05 대조 완료). scripts/sync-pen-tokens.cjs가 tokens.json으로 동기화하고 tokens:check가 불일치를 잡는다.",
+    "tokenFrames": "KF / Color tokens (G6EBa) — 라이트/다크 스와치 · KF / Typography (THKua) — 타이포 13종 샘플"
   },
   "components": {
-    "Text": { "code": "components/ui/text.tsx", "source": "react-native-reusables", "pencil": "없음 (RNR 기본, Text style / tokens 참조)" },
-    "Button": { "code": "components/ui/button.tsx", "source": "react-native-reusables", "pencil": "Button / Primary / Active (Jj2rR)" },
-    "Input": { "code": "components/ui/input.tsx", "source": "react-native-reusables", "pencil": "Text field / Default (idi6K)" },
-    "Card": { "code": "components/ui/card.tsx", "source": "react-native-reusables", "pencil": "Card / 1 (eCPyS)" },
-    "Badge": { "code": "components/ui/badge.tsx", "source": "react-native-reusables", "pencil": "없음" },
-    "Skeleton": { "code": "components/ui/skeleton.tsx", "source": "react-native-reusables", "pencil": "없음" },
-    "Separator": { "code": "components/ui/separator.tsx", "source": "react-native-reusables", "pencil": "없음" },
-    "Icon": { "code": "components/ui/icon.tsx", "source": "react-native-reusables", "pencil": "없음 (lucide icon 노드)" },
-    "Dialog": { "code": "components/ui/dialog.tsx", "source": "react-native-reusables", "pencil": "없음 (킷: System / Popover toP2P)" },
-    "AmountText": { "code": "components/ui/amount-text.tsx", "pencil": "없음 (home 아트보드 AmountText / md 텍스트)" },
-    "AmountInput": { "code": "components/ui/amount-input.tsx", "pencil": "Amount / Default·Active (kJ5d5, U7I9O) — 빠른 금액 칩" },
-    "EmptyState": { "code": "components/ui/empty-state.tsx", "pencil": "없음" },
-    "Toast": { "code": "components/ui/toast.tsx", "pencil": "없음" },
-    "BottomSheet": { "code": "components/ui/bottom-sheet.tsx", "pencil": "없음" },
-    "ListGroup": { "code": "components/ui/list-group.tsx", "pencil": "없음 (킷: Row / Select Language mjauX·tseRt)" },
-    "AccountCard": { "code": "features/account/components/AccountCard.tsx", "pencil": "home 아트보드 AccountCard / default · 킷 Card Bank / 1 (G7STAl) — 장식 원 제외, 단색 사각형" },
-    "TransactionRow": { "code": "features/account/components/TransactionRow.tsx", "pencil": "Row / Transaction (Screen) / Increase·Reduction (iYqhi, dO0dg)" },
-    "PinPad": { "code": "features/auth/components/PinPad.tsx", "pencil": "없음 (킷: System / Keyboards / Numbers Byp0i)" },
-    "TabBar": { "code": "components/ui/tab-bar.tsx", "pencil": "home 아트보드 TabBar · 킷 Tab bar / Home·Search·Message·Setting (q9GAqW, lPI0Y, MeobY, qI9Ti)" }
+    "KF / StatusBar": {
+      "code": "없음 (화면 조립 시 SafeArea + 시스템 상태바)",
+      "pencil": "KF / StatusBar (NzHfQ) — reusable"
+    },
+    "KF / TabBar": {
+      "code": "components/ui/tab-bar.tsx",
+      "pencil": "KF / TabBar (m26NO) — reusable, 탭: 홈·자산·예산·리포트·마이(lucide house·wallet·calculator·chart-column·user)"
+    },
+    "Text": {
+      "code": "components/ui/text.tsx",
+      "source": "react-native-reusables",
+      "pencil": "없음"
+    },
+    "Button": {
+      "code": "components/ui/button.tsx",
+      "source": "react-native-reusables",
+      "pencil": "없음 (각 화면 CTA 프레임: h 56, $radius-xl, $primary)"
+    },
+    "Input": {
+      "code": "components/ui/input.tsx",
+      "source": "react-native-reusables",
+      "pencil": "budget 아트보드 BudgetInputField (rzERs)"
+    },
+    "Card": {
+      "code": "components/ui/card.tsx",
+      "source": "react-native-reusables",
+      "pencil": "asset-select 아트보드 BankRow ($card + $border)"
+    },
+    "Badge": {
+      "code": "components/ui/badge.tsx",
+      "source": "react-native-reusables",
+      "pencil": "asset-import-result 아트보드 Badge-성공(XFhIO)·Badge-실패(A6j6li)"
+    },
+    "Skeleton": {
+      "code": "components/ui/skeleton.tsx",
+      "source": "react-native-reusables",
+      "pencil": "없음"
+    },
+    "Separator": {
+      "code": "components/ui/separator.tsx",
+      "source": "react-native-reusables",
+      "pencil": "mypage 아트보드 Divider ($border 1px)"
+    },
+    "Icon": {
+      "code": "components/ui/icon.tsx",
+      "source": "react-native-reusables",
+      "pencil": "없음 (lucide icon 노드)"
+    },
+    "Dialog": {
+      "code": "components/ui/dialog.tsx",
+      "source": "react-native-reusables",
+      "pencil": "없음"
+    },
+    "AmountText": {
+      "code": "components/ui/amount-text.tsx",
+      "pencil": "assets 아트보드 총자산(NbfPh, 36/700) · home/character 잔여금액(gaJqW, 32/700)"
+    },
+    "EmptyState": {
+      "code": "components/ui/empty-state.tsx",
+      "pencil": "home 아트보드 RoomCard(pvcee) — 캐릭터 미등록 상태"
+    },
+    "TransactionRow": {
+      "code": "features/account/components/TransactionRow.tsx",
+      "pencil": "assets 아트보드 TransactionRow (p858a·et92l·U8p2d)"
+    },
+    "ProgressBar": {
+      "code": "없음 (신규 필요)",
+      "pencil": "budget 아트보드 ProgressTrack/Fill · home/character BudgetCard ProgressTrack(ybpX6)"
+    },
+    "KF / TransactionList": {
+      "code": "features/account/components/TransactionRow.tsx (목록 조합)",
+      "pencil": "KF / TransactionList (iyHqB) — reusable, 최근 거래 내역 카드"
+    }
   },
   "screens": {
-    "onboarding": { "route": "app/(auth)/onboarding.tsx", "pencil": "없음 (킷: Sign up #1·#2 ACqgw·Snfjp)", "figma": "Screens / Sign up #1, Sign up #2" },
-    "login": { "route": "app/(auth)/login.tsx", "pencil": "로그인 (aXqux, 킷 Sign in)", "figma": "Screens / 로그인" },
-    "pin": { "route": "app/(auth)/pin.tsx", "pencil": "없음 (킷: System / Touch ID CJdAN)" },
-    "home": { "route": "app/(tabs)/index.tsx", "pencil": "home (ClQlB) 구현 기준 · home/dark (DyDYf) · 킷 원본 Home (CbQy2)", "figma": "Screens / home, home/dark, Home" },
-    "account-detail": { "route": "app/account/[accountId].tsx", "pencil": "없음" },
-    "transfer-recipient": { "route": "app/transfer/recipient.tsx", "pencil": "없음" },
-    "transfer-amount": { "route": "app/transfer/amount.tsx", "pencil": "없음" },
-    "transfer-confirm": { "route": "app/transfer/confirm.tsx", "pencil": "없음" },
-    "transfer-complete": { "route": "app/transfer/complete.tsx", "pencil": "없음" },
-    "settings": { "route": "app/(tabs)/settings.tsx", "pencil": "없음 (킷: Tab bar / Setting qI9Ti 탭만 존재)", "note": "화면 디자인 없음 — 준비 중 EmptyState 플레이스홀더" },
-    "search": { "route": "app/(tabs)/search.tsx", "pencil": "없음 (킷: Tab bar / Search lPI0Y 탭만 존재)", "note": "화면 디자인 없음 — 준비 중 EmptyState 플레이스홀더" },
-    "messages": { "route": "app/(tabs)/messages.tsx", "pencil": "없음 (킷: Tab bar / Message MeobY 탭만 존재)", "note": "화면 디자인 없음 — 준비 중 EmptyState 플레이스홀더" }
+    "home": {
+      "route": "app/(tabs)/index.tsx",
+      "pencil": "home (OVTos) — 캐릭터 미등록(빈 방 + CTA 이미지)",
+      "figma": "와이어프레임 초안 / 홈 (160:1509)"
+    },
+    "home/character": {
+      "route": "app/(tabs)/index.tsx",
+      "pencil": "home/character (M2jyd) — 캐릭터 활성화 + 코인·상점 배지 + 남은 예산 카드",
+      "figma": "와이어프레임 초안 / 홈 (캐릭터 활성화) (160:2063)"
+    },
+    "terms": {
+      "route": "app/(auth)/terms.tsx [제안]",
+      "pencil": "terms (uza5G)",
+      "figma": "와이어프레임 초안 / 약관 동의 (171:3024)"
+    },
+    "asset-select": {
+      "route": "app/(auth)/asset-select.tsx [제안]",
+      "pencil": "asset-select (e3aWUB) — 실제 은행 아이콘 이미지",
+      "figma": "와이어프레임 초안 / 내 자산 선택 (171:3068)"
+    },
+    "asset-import-result": {
+      "route": "app/(auth)/asset-import-result.tsx [제안]",
+      "pencil": "asset-import-result (lHouF)",
+      "figma": "와이어프레임 초안 / 자산 불러오기 결과 (171:6873)"
+    },
+    "character-moving-in": {
+      "route": "app/(auth)/character-moving-in.tsx [제안]",
+      "pencil": "character-moving-in (cdgxD)",
+      "figma": "와이어프레임 초안 / 캐릭터 입주중 (171:6933)"
+    },
+    "assets": {
+      "route": "app/(tabs)/assets.tsx [제안]",
+      "pencil": "assets (J34JR) — 총자산·계좌/카드/대출 탭·정기결제·최근 거래",
+      "figma": "와이어프레임 초안 / 자산관리 (160:1580)"
+    },
+    "budget": {
+      "route": "app/(tabs)/budget.tsx [제안]",
+      "pencil": "budget (MAcPY) — 총 예산 설정 + 카테고리별 진행바",
+      "figma": "와이어프레임 초안 / 예산관리 (160:1654)"
+    },
+    "report": {
+      "route": "app/(tabs)/report.tsx [제안]",
+      "pencil": "report (NSuGt) — AI 분석 카드·도넛·4개월 추이",
+      "figma": "와이어프레임 초안 / 월간 리포트 조회 (171:2832)"
+    },
+    "mypage": {
+      "route": "app/(tabs)/mypage.tsx [제안]",
+      "pencil": "mypage (an4xw)",
+      "figma": "와이어프레임 초안 / 마이페이지 (171:2956)"
+    }
   },
+  "screensNote": "코드(app/)는 아직 이전 핀테크 화면 구현이다. KeyFin 화면의 라우트는 [제안] 표시 — 실제 구현 시 확정한다. 로딩·빈·오류 상태 아트보드는 아직 없음(추가 필요).",
   "figmaExport": {
-    "$note": "Pencil → Figma 한 방향 내보내기(scripts/figma, pnpm figma:build). 공유·열람용 출력물이며 코드 구현·대조에는 쓰지 않는다. SCREEN_IDS 순서.",
-    "로그인": { "pencil": "aXqux", "figma": "Screens / 로그인" },
-    "Sign up #1": { "pencil": "ACqgw", "figma": "Screens / Sign up #1" },
-    "Sign up #2": { "pencil": "Snfjp", "figma": "Screens / Sign up #2" },
-    "Forgot password #1": { "pencil": "h6Ziyl", "figma": "Screens / Forgot password #1" },
-    "Forgot password #2": { "pencil": "wV0pm", "figma": "Screens / Forgot password #2" },
-    "Forgot password #3": { "pencil": "QvgnZ", "figma": "Screens / Forgot password #3" },
-    "Forgot password #4": { "pencil": "vbpej", "figma": "Screens / Forgot password #4" },
-    "Change password #1": { "pencil": "jiH3j", "figma": "Screens / Change password #1" },
-    "Change password #2": { "pencil": "Fo8cc", "figma": "Screens / Change password #2" },
-    "Home": { "pencil": "CbQy2", "figma": "Screens / Home", "note": "킷 원본" },
-    "home": { "pencil": "ClQlB", "figma": "Screens / home", "note": "구현 기준 · 색 변수 바인딩 · lucide 아이콘" },
-    "home/dark": { "pencil": "DyDYf", "figma": "Screens / home/dark", "note": "구현 기준 · color 컬렉션 dark 모드 고정" }
+    "$note": "Pencil → Figma 한 방향 내보내기(scripts/figma, pnpm figma:build). 원본 KeyFin Figma 파일(xa7rWgfvEwCLKPlvV6eFQf)이 이미 존재하므로 내보내기는 필요 시에만. SCREEN_IDS는 재설정 필요.",
+    "screens": [
+      "home (OVTos)",
+      "home/character (M2jyd)",
+      "terms (uza5G)",
+      "asset-select (e3aWUB)",
+      "asset-import-result (lHouF)",
+      "character-moving-in (cdgxD)",
+      "assets (J34JR)",
+      "budget (MAcPY)",
+      "report (NSuGt)",
+      "mypage (an4xw)"
+    ]
+  },
+  "reference": {
+    "KF / Color tokens": "G6EBa — 시맨틱 색 35 + white/black, mode light/dark 컬럼",
+    "KF / Typography": "THKua — display~button 13종 (Pretendard, 캔버스는 폴백 렌더)",
+    "KF / Icons": "W6BjWb — KeyFin 로고 보드, 앱 은행 아이콘 4종, 은행 CI 보드 6종(이미지 참고 자료, 원본은 Figma 아이콘 섹션 2:8)"
   }
 }
