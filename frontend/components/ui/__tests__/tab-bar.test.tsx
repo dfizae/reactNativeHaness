@@ -7,8 +7,8 @@ jest.mock("react-native-safe-area-context", () => ({
 }));
 
 function buildProps(activeIndex: number) {
-  const routes = ["index", "search", "messages", "settings"].map((name) => ({ key: `${name}-key`, name }));
-  const titles: Record<string, string> = { index: "홈", search: "검색", messages: "메시지", settings: "설정" };
+  const routes = ["index", "assets", "budget", "report", "mypage"].map((name) => ({ key: `${name}-key`, name }));
+  const titles: Record<string, string> = { index: "홈", assets: "자산", budget: "예산", report: "리포트", mypage: "마이" };
   const emit = jest.fn(() => ({ defaultPrevented: false }));
   const navigate = jest.fn();
   const props = {
@@ -21,20 +21,21 @@ function buildProps(activeIndex: number) {
 }
 
 describe("TabBar", () => {
-  it("활성 탭만 라벨을 보여주고 selected 상태를 갖는다", async () => {
+  it("탭 5개의 라벨을 모두 보여주고 활성 탭만 selected 상태를 갖는다", async () => {
     await render(<TabBar {...buildProps(0).props} />);
-    expect(screen.getByText("홈")).toBeTruthy();
-    expect(screen.queryByText("검색")).toBeNull();
+    for (const label of ["홈", "자산", "예산", "리포트", "마이"]) {
+      expect(screen.getByText(label)).toBeTruthy();
+    }
     expect(screen.getByRole("tab", { name: "홈" }).props.accessibilityState).toEqual({ selected: true });
-    expect(screen.getByRole("tab", { name: "검색" }).props.accessibilityState).toEqual({ selected: false });
+    expect(screen.getByRole("tab", { name: "자산" }).props.accessibilityState).toEqual({ selected: false });
   });
 
   it("비활성 탭을 누르면 tabPress 이벤트 후 이동하고, 활성 탭은 이동하지 않는다", async () => {
     const { props, emit, navigate } = buildProps(0);
     await render(<TabBar {...props} />);
-    await fireEvent.press(screen.getByRole("tab", { name: "설정" }));
-    expect(emit).toHaveBeenCalledWith({ type: "tabPress", target: "settings-key", canPreventDefault: true });
-    expect(navigate).toHaveBeenCalledWith("settings");
+    await fireEvent.press(screen.getByRole("tab", { name: "마이" }));
+    expect(emit).toHaveBeenCalledWith({ type: "tabPress", target: "mypage-key", canPreventDefault: true });
+    expect(navigate).toHaveBeenCalledWith("mypage");
 
     await fireEvent.press(screen.getByRole("tab", { name: "홈" }));
     expect(navigate).toHaveBeenCalledTimes(1);

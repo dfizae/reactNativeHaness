@@ -1,11 +1,11 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { HomeScreen } from "@/features/account/components/HomeScreen";
+import { CharacterHomeScreen } from "@/features/home/components/CharacterHomeScreen";
 
 export default function HomeRoute() {
   return (
-    <SafeAreaView className="flex-1 bg-primary" edges={["top"]}>
-      <HomeScreen />
+    <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
+      <CharacterHomeScreen />
     </SafeAreaView>
   );
 }

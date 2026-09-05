@@ -1,5 +1,5 @@
 import type { Tabs } from "expo-router";
-import { House, Mail, Search, Settings, type LucideIcon } from "lucide-react-native";
+import { Calculator, ChartColumn, House, User, Wallet, type LucideIcon } from "lucide-react-native";
 import * as React from "react";
 import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -12,9 +12,10 @@ type TabBarProps = Parameters<NonNullable<React.ComponentProps<typeof Tabs>["tab
 
 const TAB_ICONS: Record<string, LucideIcon> = {
   index: House,
-  search: Search,
-  messages: Mail,
-  settings: Settings,
+  assets: Wallet,
+  budget: Calculator,
+  report: ChartColumn,
+  mypage: User,
 };
 
 const MIN_BOTTOM_INSET = 20;
@@ -24,15 +25,16 @@ function TabBar({ state, descriptors, navigation }: TabBarProps) {
 
   return (
     <View
-      className="flex-row items-center justify-between bg-card px-10 pt-5 dark:border-t dark:border-border"
+      className="flex-row items-start justify-between border-t border-border bg-card px-6 pt-1.5"
       style={{ paddingBottom: Math.max(insets.bottom, MIN_BOTTOM_INSET) }}
       accessibilityRole="tablist"
     >
       {state.routes.map((route, index) => {
+        if (!(route.name in TAB_ICONS)) return null;
         const options = descriptors[route.key]?.options;
         const focused = state.index === index;
         const label = typeof options?.title === "string" ? options.title : route.name;
-        const icon = TAB_ICONS[route.name] ?? House;
+        const icon = TAB_ICONS[route.name] as LucideIcon;
 
         const handlePress = () => {
           const event = navigation.emit({ type: "tabPress", target: route.key, canPreventDefault: true });
@@ -47,13 +49,12 @@ function TabBar({ state, descriptors, navigation }: TabBarProps) {
             accessibilityLabel={label}
             accessibilityState={{ selected: focused }}
             hitSlop={8}
-            className={cn(
-              "h-9 min-w-touch flex-row items-center justify-center gap-2 rounded-full",
-              focused ? "bg-primary px-4" : "active:bg-muted"
-            )}
+            className="min-w-touch flex-col items-center gap-0.5 py-1 active:opacity-80"
           >
-            <Icon as={icon} size={focused ? 20 : 24} className={focused ? "text-primary-foreground" : "text-muted-foreground"} />
-            {focused ? <Text className="text-caption text-primary-foreground">{label}</Text> : null}
+            <View className={cn("rounded-full px-2.5 py-0.5", focused && "bg-secondary")}>
+              <Icon as={icon} size={22} className={focused ? "text-primary" : "text-muted-foreground"} />
+            </View>
+            <Text className={cn("text-caption", focused ? "text-primary" : "text-muted-foreground")}>{label}</Text>
           </Pressable>
         );
       })}
