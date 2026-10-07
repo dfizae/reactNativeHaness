@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // 하네스·디자인 원천을 저장소 밖으로 복사한다.
-// 이 경로들은 .gitignore 대상이라 git 이 백업해 주지 않는다. 브랜치 전환·pull 로
-// 통째로 사라진 적이 있어(2026-09-08) 로컬 사본을 따로 둔다.
+// 하네스를 팀 저장소에 올리지 않는(.gitignore 로 추적하지 않는) 프로젝트에서 쓴다. 그 경우
+// git 이 백업해 주지 않아 브랜치 전환·pull 로 통째로 사라질 수 있으므로 로컬 사본을 따로 둔다.
 // bash/rsync 의존 없이 node만으로 동작하므로 OS에 관계없이 같은 결과를 낸다.
 const fs = require("fs");
 const os = require("os");
@@ -9,7 +9,10 @@ const path = require("path");
 
 process.chdir(path.join(__dirname, ".."));
 
-const ROOT = process.env.KEYFIN_HARNESS_BACKUP || path.join(os.homedir(), "keyfin-harness-backup");
+// 기본 위치는 프로젝트마다 다르게 잡는다(~/harness-backup/<저장소>-<폴더>). 한 곳을 같이 쓰면
+// 다른 프로젝트의 백업을 덮어쓴다.
+const PROJECT = `${path.basename(path.dirname(process.cwd()))}-${path.basename(process.cwd())}`;
+const ROOT = process.env.HARNESS_BACKUP_DIR || path.join(os.homedir(), "harness-backup", PROJECT);
 const CURRENT = path.join(ROOT, "current");
 const PREV = path.join(ROOT, "prev");
 
@@ -43,7 +46,7 @@ for (const t of TARGETS) {
 fs.writeFileSync(
   path.join(CURRENT, "BACKUP-INFO.txt"),
   [
-    "KeyFin 프론트 하네스 백업",
+    "하네스 백업 (" + PROJECT + ")",
     "생성: " + new Date().toISOString(),
     "원본: " + process.cwd(),
     "파일: " + files + "개 / " + (bytes / 1048576).toFixed(1) + "MB",

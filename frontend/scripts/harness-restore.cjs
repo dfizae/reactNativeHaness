@@ -8,7 +8,9 @@ const path = require("path");
 
 process.chdir(path.join(__dirname, ".."));
 
-const ROOT = process.env.KEYFIN_HARNESS_BACKUP || path.join(os.homedir(), "keyfin-harness-backup");
+// harness-backup.cjs 와 같은 위치 규칙을 쓴다.
+const PROJECT = `${path.basename(path.dirname(process.cwd()))}-${path.basename(process.cwd())}`;
+const ROOT = process.env.HARNESS_BACKUP_DIR || path.join(os.homedir(), "harness-backup", PROJECT);
 const SRC = path.join(ROOT, process.argv.includes("--prev") ? "prev" : "current");
 const DRY = process.argv.includes("--dry");
 

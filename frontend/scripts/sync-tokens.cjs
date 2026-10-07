@@ -259,7 +259,8 @@ for (const [rel, content] of outputs) {
   const abs = path.join(ROOT, rel);
   const current = fs.existsSync(abs) ? fs.readFileSync(abs, "utf8") : null;
   if (CHECK) {
-    if (current !== content) stale.push(rel);
+    // CRLF 체크아웃(Windows autocrlf)도 허용하도록 \r 은 제거하고 비교한다
+    if (current === null || current.replace(/\r\n/g, "\n") !== content) stale.push(rel);
   } else {
     fs.mkdirSync(path.dirname(abs), { recursive: true });
     fs.writeFileSync(abs, content);
