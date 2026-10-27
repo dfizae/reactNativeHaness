@@ -3,7 +3,7 @@
  * design/tokens.json → tailwind.config.js, global.css, lib/theme.ts 생성
  *
  *   node scripts/sync-tokens.cjs          생성
- *   node scripts/sync-tokens.cjs --check  생성 결과가 현재 파일과 같은지만 확인 (CI용, 다르면 exit 1)
+ *   node scripts/sync-tokens.cjs --check  생성 결과가 현재 파일과 같은지만 확인 (harness:check용, 다르면 exit 1)
  *
  * 규칙:
  * - 시맨틱 색상(shadcn/React Native Reusables 규약)만 Tailwind 테마에 노출한다. 프리미티브 팔레트는 className에서 쓸 수 없다.

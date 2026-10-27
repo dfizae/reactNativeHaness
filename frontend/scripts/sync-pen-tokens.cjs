@@ -3,7 +3,7 @@
  * design.pen(Pencil 문서 변수) → design/tokens.json 동기화
  *
  *   node scripts/sync-pen-tokens.cjs          Pencil 변수와 다른 토큰 값을 tokens.json에 반영하고 $source.pencilSyncedAt 갱신
- *   node scripts/sync-pen-tokens.cjs --check  불일치만 보고 (있으면 exit 1 — 훅·CI용)
+ *   node scripts/sync-pen-tokens.cjs --check  불일치만 보고 (있으면 exit 1 — 훅·harness:check용)
  *
  * 디자인의 확정 원천은 Pencil(design.pen)이다. design.pen은 평문 JSON이라 파일을 직접 읽는다(MCP 불필요).
  *
@@ -149,7 +149,13 @@ for (const group of ["radius", "size"]) {
 
 const label = CHECK ? "검사" : "동기화";
 if (unmapped.length) console.log(`  △ tokens.json에 대응 토큰이 없는 Pencil 변수 ${unmapped.length}개: ${unmapped.join(", ")}`);
-if (missing.length) console.log(`  △ Pencil 변수가 없는 토큰 ${missing.length}개(코드 전용으로 간주): ${missing.join(", ")}`);
+// 코드 전용 토큰 목록은 매번 같은 긴 줄이라 검사 모드에서는 개수만 보인다(--verbose로 전체).
+if (missing.length)
+  console.log(
+    CHECK && !process.argv.includes("--verbose")
+      ? `  △ Pencil 변수가 없는 코드 전용 토큰 ${missing.length}개`
+      : `  △ Pencil 변수가 없는 토큰 ${missing.length}개(코드 전용으로 간주): ${missing.join(", ")}`,
+  );
 
 if (drift.length === 0) {
   console.log(`design.pen ↔ tokens.json ${label}: 일치 (Pencil 변수 ${Object.keys(pen.variables ?? {}).length}개)`);
