@@ -9,6 +9,7 @@
     "harness:sync": "node scripts/sync-harness.cjs",
     "harness:check": "node scripts/check-harness.cjs",
     "harness:backup": "node scripts/harness-backup.cjs",
-    "harness:restore": "node scripts/harness-restore.cjs"
+    "harness:restore": "node scripts/harness-restore.cjs",
+    "e2e": "maestro test .maestro/flows"
   }
 }
