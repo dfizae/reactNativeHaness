@@ -9,8 +9,6 @@
     "harness:sync": "node scripts/sync-harness.cjs",
     "harness:check": "node scripts/check-harness.cjs",
     "harness:backup": "node scripts/harness-backup.cjs",
-    "harness:restore": "node scripts/harness-restore.cjs",
-    "figma:build": "node scripts/figma/build-plugin.cjs",
-    "figma:smoke": "node scripts/figma/build-plugin.cjs && node scripts/figma/smoke.cjs && STARTER=1 node scripts/figma/smoke.cjs && FAIL_EVERY=97 node scripts/figma/smoke.cjs"
+    "harness:restore": "node scripts/harness-restore.cjs"
   }
 }
