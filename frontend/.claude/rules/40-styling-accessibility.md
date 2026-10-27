@@ -23,7 +23,7 @@ paths:
 
 ## 컴포넌트 선택
 
-- **탭 화면에는 헤더를 두지 않는다**(사용자 결정 2026-09-18). 탭바가 현재 위치를 알려 주므로 제목 헤더는 중복이다. 대신 `components/ui/screen.tsx` 의 `useHeaderlessTop()`(상태바 + 20)으로 상단 여백만 준다.
+- **탭 화면에는 제목 헤더를 두지 않는다**(KeyFin 때 사용자 결정 2026-09-18 — 여기록 시안이 확정되면 다시 확인 `[확인]`). 탭바가 현재 위치를 알려 주므로 제목 헤더는 중복이다. 대신 `components/ui/screen.tsx` 의 `useHeaderlessTop()`(상태바 + 20)으로 상단 여백만 준다. 메인 페이지의 검색 필드·My 진입, 지도 탭의 카테고리 칩처럼 기능이 있는 상단 영역은 제목 헤더가 아니므로 둘 수 있다.
 - 뒤로가기가 있는 화면(상세·온보딩·설정)의 상단 헤더는 `@/components/ui/screen-header`의 `ScreenHeader`(`<` + `text-h1` 제목 + 오른쪽 액션)만 쓴다. 헤더 행을 화면마다 새로 만들거나 제목 크기를 `text-h2`·`text-h3`로 낮추지 않는다. 그 헤더가 돌아가는 유일한 길이므로 없애지 않는다.
 - 터치 상호작용에는 `Pressable`을 사용하고, `Text`에 `onPress`를 직접 붙이는 방식은 본문 내 링크처럼 필요한 경우로 제한한다.
 - 항목 수가 많거나 가변적인 목록은 `ScrollView` + `map`이 아니라 `FlatList` 또는 `SectionList`를 사용한다.
@@ -32,7 +32,7 @@ paths:
 
 ## 접근성
 
-- 터치 타깃은 최소 44x44pt를 확보하고, 시각적 크기를 키울 수 없으면 `hitSlop`을 지정한다.
+- 터치 타깃은 최소 44x44pt, 터치 요소 사이 간격은 8pt 이상을 확보한다(Figma 디자인 시스템 사용 규칙 05). 시각적 크기를 키울 수 없으면(필터 칩 30·37pt 등) `hitSlop`을 지정한다.
 - 상호작용 요소에는 `accessibilityRole`을 지정하고, 아이콘 전용 버튼에는 `accessibilityLabel`을 반드시 제공한다.
 - 선택·비활성화 등 요소의 상태는 `accessibilityState`로 전달한다.
 - 의미 있는 이미지에는 `accessibilityLabel`을 제공하고, 장식용 요소는 `accessible={false}` 등으로 보조 기술에서 제외한다.
