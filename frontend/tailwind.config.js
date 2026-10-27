@@ -22,39 +22,41 @@ module.exports = {
       "popover-foreground": "rgb(var(--color-popover-foreground) / <alpha-value>)",
       "primary": "rgb(var(--color-primary) / <alpha-value>)",
       "primary-foreground": "rgb(var(--color-primary-foreground) / <alpha-value>)",
+      "primary-pressed": "rgb(var(--color-primary-pressed) / <alpha-value>)",
       "secondary": "rgb(var(--color-secondary) / <alpha-value>)",
       "secondary-foreground": "rgb(var(--color-secondary-foreground) / <alpha-value>)",
       "muted": "rgb(var(--color-muted) / <alpha-value>)",
       "muted-foreground": "rgb(var(--color-muted-foreground) / <alpha-value>)",
+      "foreground-secondary": "rgb(var(--color-foreground-secondary) / <alpha-value>)",
+      "brand-muted": "rgb(var(--color-brand-muted) / <alpha-value>)",
       "accent": "rgb(var(--color-accent) / <alpha-value>)",
       "accent-foreground": "rgb(var(--color-accent-foreground) / <alpha-value>)",
+      "disabled": "rgb(var(--color-disabled) / <alpha-value>)",
+      "disabled-foreground": "rgb(var(--color-disabled-foreground) / <alpha-value>)",
       "destructive": "rgb(var(--color-destructive) / <alpha-value>)",
       "destructive-foreground": "rgb(var(--color-destructive-foreground) / <alpha-value>)",
-      "destructive-muted": "rgb(var(--color-destructive-muted) / <alpha-value>)",
       "positive": "rgb(var(--color-positive) / <alpha-value>)",
-      "positive-foreground": "rgb(var(--color-positive-foreground) / <alpha-value>)",
       "positive-muted": "rgb(var(--color-positive-muted) / <alpha-value>)",
-      "warning": "rgb(var(--color-warning) / <alpha-value>)",
-      "warning-foreground": "rgb(var(--color-warning-foreground) / <alpha-value>)",
-      "warning-muted": "rgb(var(--color-warning-muted) / <alpha-value>)",
-      "info": "rgb(var(--color-info) / <alpha-value>)",
-      "info-foreground": "rgb(var(--color-info-foreground) / <alpha-value>)",
-      "info-muted": "rgb(var(--color-info-muted) / <alpha-value>)",
       "highlight": "rgb(var(--color-highlight) / <alpha-value>)",
-      "highlight-foreground": "rgb(var(--color-highlight-foreground) / <alpha-value>)",
-      "inverse": "rgb(var(--color-inverse) / <alpha-value>)",
-      "inverse-foreground": "rgb(var(--color-inverse-foreground) / <alpha-value>)",
+      "highlight-muted": "rgb(var(--color-highlight-muted) / <alpha-value>)",
       "border": "rgb(var(--color-border) / <alpha-value>)",
+      "border-strong": "rgb(var(--color-border-strong) / <alpha-value>)",
       "input": "rgb(var(--color-input) / <alpha-value>)",
       "ring": "rgb(var(--color-ring) / <alpha-value>)",
+      "icon": "rgb(var(--color-icon) / <alpha-value>)",
+      "icon-active": "rgb(var(--color-icon-active) / <alpha-value>)",
+      "map-route": "rgb(var(--color-map-route) / <alpha-value>)",
+      "map-pin": "rgb(var(--color-map-pin) / <alpha-value>)",
+      "map-footprint": "rgb(var(--color-map-footprint) / <alpha-value>)",
       "white": "rgb(var(--color-white) / <alpha-value>)",
       "black": "rgb(var(--color-black) / <alpha-value>)"
     },
     borderRadius: {
       "none": "0px",
-      "sm": "6px",
-      "md": "10px",
-      "lg": "15px",
+      "xs": "6px",
+      "sm": "8px",
+      "md": "12px",
+      "lg": "16px",
       "xl": "20px",
       "2xl": "24px",
       "3xl": "32px",
@@ -62,77 +64,45 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        sans: ["Pretendard"],
+        sans: ["Noto Sans KR"],
       },
       fontSize: {
         "display": [
-          "32px",
+          "28px",
           {
             "lineHeight": "40px",
-            "letterSpacing": "-0.5px",
-            "fontWeight": "700"
-          }
-        ],
-        "amount-lg": [
-          "36px",
-          {
-            "lineHeight": "44px",
-            "letterSpacing": "-0.5px",
-            "fontWeight": "700"
-          }
-        ],
-        "amount-md": [
-          "24px",
-          {
-            "lineHeight": "32px",
-            "letterSpacing": "-0.3px",
-            "fontWeight": "600"
-          }
-        ],
-        "amount-sm": [
-          "16px",
-          {
-            "lineHeight": "24px",
             "letterSpacing": "0px",
-            "fontWeight": "600"
+            "fontWeight": "700"
           }
         ],
         "h1": [
           "24px",
           {
-            "lineHeight": "28px",
-            "letterSpacing": "-0.3px",
-            "fontWeight": "600"
+            "lineHeight": "34px",
+            "letterSpacing": "0px",
+            "fontWeight": "700"
           }
         ],
         "h2": [
           "20px",
           {
-            "lineHeight": "28px",
-            "letterSpacing": "-0.3px",
-            "fontWeight": "600"
+            "lineHeight": "30px",
+            "letterSpacing": "0px",
+            "fontWeight": "700"
           }
         ],
         "h3": [
-          "16px",
-          {
-            "lineHeight": "24px",
-            "letterSpacing": "-0.2px",
-            "fontWeight": "600"
-          }
-        ],
-        "body-lg": [
           "18px",
           {
             "lineHeight": "28px",
             "letterSpacing": "0px",
-            "fontWeight": "400"
+            "fontWeight": "700"
           }
         ],
         "body": [
           "16px",
           {
-            "lineHeight": "24px",
+            "lineHeight": "26px",
             "letterSpacing": "0px",
             "fontWeight": "400"
           }
@@ -140,7 +110,7 @@ module.exports = {
         "body-sm": [
           "14px",
           {
-            "lineHeight": "21px",
+            "lineHeight": "22px",
             "letterSpacing": "0px",
             "fontWeight": "400"
           }
@@ -148,7 +118,7 @@ module.exports = {
         "label": [
           "14px",
           {
-            "lineHeight": "21px",
+            "lineHeight": "20px",
             "letterSpacing": "0px",
             "fontWeight": "500"
           }
@@ -156,15 +126,23 @@ module.exports = {
         "caption": [
           "12px",
           {
+            "lineHeight": "18px",
+            "letterSpacing": "0px",
+            "fontWeight": "400"
+          }
+        ],
+        "micro": [
+          "11px",
+          {
             "lineHeight": "16px",
             "letterSpacing": "0px",
             "fontWeight": "500"
           }
         ],
         "button": [
-          "16px",
+          "14px",
           {
-            "lineHeight": "24px",
+            "lineHeight": "20px",
             "letterSpacing": "0px",
             "fontWeight": "500"
           }
@@ -172,47 +150,39 @@ module.exports = {
       },
       height: {
         "touch": "44px",
-        "button-lg": "56px",
+        "button-sm": "36px",
         "button-md": "44px",
-        "input": "44px",
+        "button-lg": "52px",
+        "input": "52px",
         "icon": "24px",
-        "icon-sm": "20px",
-        "icon-lg": "28px",
-        "icon-tile": "40px",
-        "avatar": "50px"
+        "icon-sm": "20px"
       },
       minHeight: {
         "touch": "44px",
-        "button-lg": "56px",
+        "button-sm": "36px",
         "button-md": "44px",
-        "input": "44px",
+        "button-lg": "52px",
+        "input": "52px",
         "icon": "24px",
-        "icon-sm": "20px",
-        "icon-lg": "28px",
-        "icon-tile": "40px",
-        "avatar": "50px"
+        "icon-sm": "20px"
       },
       minWidth: {
         "touch": "44px",
-        "button-lg": "56px",
+        "button-sm": "36px",
         "button-md": "44px",
-        "input": "44px",
+        "button-lg": "52px",
+        "input": "52px",
         "icon": "24px",
-        "icon-sm": "20px",
-        "icon-lg": "28px",
-        "icon-tile": "40px",
-        "avatar": "50px"
+        "icon-sm": "20px"
       },
       width: {
         "touch": "44px",
-        "button-lg": "56px",
+        "button-sm": "36px",
         "button-md": "44px",
-        "input": "44px",
+        "button-lg": "52px",
+        "input": "52px",
         "icon": "24px",
-        "icon-sm": "20px",
-        "icon-lg": "28px",
-        "icon-tile": "40px",
-        "avatar": "50px"
+        "icon-sm": "20px"
       },
       transitionDuration: {
         "fast": "150ms",

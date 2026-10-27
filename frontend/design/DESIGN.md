@@ -1,147 +1,193 @@
 # 디자인 스펙 (DESIGN.md)
 
 > 이 문서는 UI 작업의 **원천 문서**다. 값의 원천은 `design/tokens.json`이며, 이 문서는 그 값을 어떤 의도로 쓰는지 설명한다.
-> 2026-08-30 `design.pen`에 붙여넣은 Figma UI 킷(보라 `#3629B7` primary, Poppins, radius 15, 화면 10개)에서 값을 추출해 `tokens.json`에 반영했다. 2026-08-30 저녁 **Pencil(`design.pen`)을 단일 확정 원천으로 확정** — 토큰은 Pencil 문서 변수에서 `scripts/sync-pen-tokens.cjs`로 동기화하고(`$source.pencilSyncedAt`), Figma는 `pnpm figma:build` 출력물일 뿐 코드가 읽지 않는다. 사용자 결정(2026-08-30): 입금 green/출금 red 유지, Pretendard 유지, positive 킷 값 그대로, 다크 모드는 파생, CTA 56 유지, 모서리는 킷 그대로.
+> 값의 출처는 팀 Figma `자율 A109` › **Design 페이지**(변수 3개 컬렉션 66개, 텍스트 스타일 9개, 컴포넌트 4종)이고, 확정 원천은 그 값을 옮겨 담은 Pencil(`design.pen`) 문서 변수다. 흐름: Figma Design 페이지 → Pencil 변수 → `pnpm tokens:sync` → `tokens.json` → 산출물. 코드는 Figma를 직접 읽지 않는다.
+> 사용자 결정(2026-10-27): 폰트 **Noto Sans KR**, 토큰 이름은 **shadcn 규약 유지 + Figma 값**, **라이트 고정**(다크 모드 없음).
 >
-> 상태: **킷 반영 · Pencil 단일 원천 (design.pen 변수 ↔ tokens.json 동기화 검사 중)**
+> 상태: **Figma 디자인 시스템 v1.0 반영 · Pencil 변수 49개 동기화 · 화면 아트보드 없음**
 
 ## 1. 제품 성격과 디자인 톤
 
-- 도메인: 모바일 핀테크(계좌 조회, 이체, 결제, 인증). 사용자는 돈을 다루므로 **신뢰·정확·차분함**이 최우선이다.
-- 톤 키워드: 신뢰(Trust), 명료(Clarity), 절제(Restraint). 화려함보다 정보의 정확한 위계.
-- 무드(킷): 라이트 모드는 **흰 캔버스 + 흰 카드(옅은 보라 그림자)**, 옅은 보라(`muted` `#F2F1F9`)로 입력·비활성 영역 구분. 다크 모드는 킷에 없어 보라 톤 navy(`night` 스케일)로 파생 `[확인]`. 순수 검정(`#000`) 배경은 쓰지 않는다.
-- 포인트 컬러는 브랜드 퍼플 하나(`primary` `#3629B7`). 오렌지(`highlight` `#FB6B18`)는 강조에 한 화면당 한 곳만. 카테고리 아이콘은 킷처럼 `primary`·`destructive`·`info`·`warning`·`positive`·`highlight`를 섞어 쓴다.
-- 계좌 카드는 `bg-primary` 위 흰 텍스트의 단색 사각형(킷 Card Bank의 장식 원은 붙여넣기에서 깨져 사용하지 않음 — 사용자 결정 2026-08-30).
-- 그라데이션, 글래스모피즘, 장식용 일러스트는 온보딩·이벤트 배너 외에는 쓰지 않는다.
-- 아이콘은 `lucide-react-native` 단일 세트, `components/ui/icon.tsx`의 `Icon`으로 감싸 className을 적용한다. 이모지 아이콘 금지.
+- 서비스: 여기록 — 다른 사람의 여행 코스·발자취에서 장소를 가져와 내 여행을 만들고, 일행과 완성한 여행기를 다시 코스로 공유한다. 주요 상황은 친구들과 떠나는 1박 2일 여행이다.
+- Figma 디자인 시스템의 주제는 "여행의 순간을 잇는 디자인"이다. 기준은 iOS·Android 390px, **White-first**(흰 바탕이 기본)다.
+- 색의 역할(Figma §01):
+  - **스카이 블루**(`#49B5E7`): 브랜드와 지도
+  - **딥 블루**(`#1A73A3`): 버튼·선택 같은 인터랙션
+  - **코랄**(`#FFAA8D`·`#A84729`): 발자취의 기억
+- 화면 최상위 배경은 흰색이고, 보조 영역만 `muted`(`#F7F9FA`)를 쓴다.
+- 그라데이션은 쓰지 않는다(Figma 사용 규칙 04). 코랄은 발자취·하이라이트·작은 안내 요소에 제한적으로 쓴다(사용 규칙 03).
+- 그림자는 정의하지 않는다(Figma effect 스타일 0개). 카드 구분은 `border-border` 테두리로 한다.
+- 아이콘은 `lucide-react-native` 단일 세트를 쓰고, `components/ui/icon.tsx`의 `Icon`으로 감싼다. 이모지 아이콘은 쓰지 않는다.
 
-## 2. 색상 토큰 (shadcn / React Native Reusables 규약)
+## 2. 색상 토큰 (shadcn 이름 ← Figma 변수)
 
-시맨틱 토큰만 사용한다. 프리미티브(`blue-800`, `slate-200`)는 `tailwind.config.js`에 노출되지 않으므로 className에서 쓸 수 없다. 예외: `white`, `black`(모드 무관 고정값).
+시맨틱 토큰만 사용한다. 프리미티브(`sky-700`, `neutral-200`)는 `tailwind.config.js`에 노출되지 않는다. 예외: `white`, `black`(모드 무관 고정값, `black`은 오버레이 `bg-black/50` 전용).
 
-규약: `X` = 배경, `X-foreground` = 그 위의 텍스트, `X-muted` = 옅은 배경(배지·강조 영역).
+규약: `X` = 배경, `X-foreground` = 그 위의 글자, `X-muted` = 옅은 배경.
 
-| 역할 | 토큰 | className 예 |
-|---|---|---|
-| 화면 배경 | `background` / `foreground` | `bg-background text-foreground` |
-| 카드·목록 항목 | `card` / `card-foreground` | `bg-card` (RNR `Card`) |
-| 다이얼로그·시트·메뉴 | `popover` / `popover-foreground` | `bg-popover` |
-| 주요 버튼·활성·링크 | `primary` / `primary-foreground` | `bg-primary text-primary-foreground` (RNR `Button` default) |
-| 보조 버튼 | `secondary` / `secondary-foreground` | RNR `Button variant="secondary"` |
-| 입력 배경·스켈레톤·비활성 | `muted` / `muted-foreground` | `bg-muted`, 보조 텍스트 `text-muted-foreground` |
-| 눌림·선택 배경 | `accent` / `accent-foreground` | RNR ghost/outline active |
-| 출금·손실·오류·파괴적 액션 | `destructive` / `destructive-foreground` / `destructive-muted` | `text-destructive`, 배지 `bg-destructive-muted text-destructive` |
-| 입금·수익·성공 | `positive` / `positive-foreground` / `positive-muted` | `text-positive`, 배지 `bg-positive-muted text-positive` |
-| 경고 | `warning` / `warning-foreground` / `warning-muted` | `text-warning` |
-| 정보 | `info` / `info-foreground` / `info-muted` | `bg-info-muted text-info` |
-| 강조 오렌지 | `highlight` / `highlight-foreground` | `text-highlight` |
-| 토스트·툴팁 | `inverse` / `inverse-foreground` | `bg-inverse text-inverse-foreground` |
-| 테두리 | `border` | `border-border` |
-| 입력 테두리 | `input` | `border-input` (RNR `Input`) |
-| 포커스 링 | `ring` | `border-ring` |
-| 오버레이 | `black/50` | 다이얼로그 스크림 (RNR `Dialog`) |
+| 코드 토큰 | Figma 변수 | 값 | 용도 · className 예 |
+|---|---|---|---|
+| `background` | `bg/canvas` | `#FFFFFF` | 화면 배경 `bg-background` |
+| `foreground` | `text/primary` | `#14191F` | 기본 글자 `text-foreground` (17.67:1) |
+| `foreground-secondary` | `text/secondary` | `#414A53` | 본문 보조 글자 `text-foreground-secondary` (9.02:1) |
+| `muted-foreground` | `text/muted` | `#66717D` | 플레이스홀더·보조 설명 (4.97:1) |
+| `card` · `popover` (+`-foreground`) | `bg/surface` · `text/primary` | `#FFFFFF` · `#14191F` | 카드·목록 항목 / 다이얼로그·바텀시트 |
+| `muted` | `bg/subtle` | `#F7F9FA` | 보조 영역·스켈레톤 `bg-muted` |
+| `primary` · `primary-foreground` | `action/primary` · `text/on-brand` | `#1A73A3` · `#FFFFFF` | 주요 버튼·링크 (5.22:1). RNR `Button` default |
+| `primary-pressed` | `action/primary-hover` | `#145C83` | 주요 버튼 눌림 상태(RN에는 hover가 없다) |
+| `secondary` · `secondary-foreground` | `action/secondary` · `text/brand` | `#EFF9FE` · `#1A73A3` | 보조 버튼 |
+| `brand-muted` | `bg/brand-soft` | `#EFF9FE` | 선택된 칩·Brand 배지 배경 |
+| `accent` · `accent-foreground` | `bg/selected` · `text/brand` | `#D9F1FC` · `#1A73A3` | 눌림·선택 배경 |
+| `disabled` · `disabled-foreground` | `action/disabled` · `text/muted` | `#E6EAEE` · `#66717D` | 비활성 버튼(4.11:1 — 비활성은 대비 기준 예외) |
+| `destructive` · `destructive-foreground` | `status/error` · (없음) | `#CB4646` · `#FFFFFF` | 오류·삭제 (흰 배경 4.66:1) |
+| `positive` · `positive-muted` | `status/success` · (없음) | `#178663` · `#EAF7F1` | 완료·성공. 배지 배경은 Figma 직접 입력값 `[확인]` |
+| `highlight` · `highlight-muted` | `text/coral` · `bg/coral-soft` | `#A84729` · `#FFF4EF` | 발자취 강조 (5.40:1) |
+| `border` · `input` | `border/default` | `#E6EAEE` | 구분선·카드·입력 테두리 |
+| `border-strong` | `border/strong` | `#D4DAE0` | 강조 구분선 |
+| `ring` | `border/selected` | `#1A73A3` | 포커스·선택 테두리 |
+| `icon` · `icon-active` | `icon/default` · `icon/active` | `#414A53` · `#1A73A3` | 아이콘 `text-icon` |
+| `map-route` | `map/route` | `#49B5E7` | 지도 경로선 — `lib/theme.ts`로 전달 |
+| `map-pin` | `map/pin` | `#1A73A3` | 장소 핀 |
+| `map-footprint` | `map/footprint` | `#FFAA8D` | 발자취 핀 |
 
-### 금액 부호 색상 (명시 규칙)
+Figma Semantic Colors 26개는 위 표에 모두 대응된다. `destructive-foreground`와 `positive-muted` 2개는 Figma에 변수가 없어 코드 쪽에서 정한 값이다.
 
-- 이 프로젝트에서 **입금/수익 = `positive`(green), 출금/손실 = `destructive`(red)** 로 고정한다. 킷은 입금·출금 모두 빨강을 쓰지만 따르지 않는다(사용자 결정 2026-08-30).
-- `positive` `#52D5BA`는 흰 배경 텍스트 대비가 약 2:1로 낮다. 킷 값 그대로 쓰기로 했으므로(2026-08-30) 금액 부호·텍스트를 항상 함께 두어 색에만 의존하지 않는다.
-- 증권 시세(상승 빨강·하락 파랑)의 한국 관례를 따라야 하는 화면이 생기면 별도 토큰(`up`/`down`)을 Pencil 변수에 추가한 뒤 동기화한다. 기존 토큰의 의미를 바꾸지 않는다.
-- 색만으로 의미를 전달하지 않는다. 금액 앞에 `+`/`-` 부호 또는 "입금"/"출금" 텍스트를 항상 함께 둔다.
+### 사용 규칙 (Figma Design 페이지 §04)
 
-### 라이트/다크
+1. 화면 최상위 배경은 흰색이고, 보조 영역만 `muted`를 쓴다.
+2. 스카이(`#49B5E7`) 배경에는 흰 작은 글자를 쓰지 않는다(2.32:1). 흰 버튼의 글자는 딥 블루를 쓴다.
+3. 코랄은 발자취·하이라이트·작은 안내 요소에만 제한적으로 쓴다.
+4. 입력 테두리는 `input`, 선택 상태는 `ring`(딥 블루)이다. 그라데이션은 쓰지 않는다.
+5. 터치 영역은 최소 44px, 터치 요소 사이 간격은 8px 이상이다.
 
-- `global.css`의 `:root`(라이트)와 `.dark:root`(다크) CSS 변수로 전환된다. `darkMode: "class"`이며 NativeWind `useColorScheme()`의 `setColorScheme('light' | 'dark' | 'system')`으로 제어한다. 기본은 시스템 설정을 따른다.
-- 색상에 `dark:` variant를 직접 쓰지 않는다. 다크에서 구조가 달라지는 경우(그림자 → 테두리)에만 `dark:`를 쓴다. RNR 컴포넌트 원본에 포함된 `dark:` 클래스는 그대로 둔다.
+### 대비 주의 (WCAG, 2026-10-27 계산)
+
+- 지도 위 **발자취 핀** `map-footprint`의 흰 배경 대비는 1.84:1이고, 경로선 `map-route`는 2.32:1이다. 그래픽 요소 기준 3:1에 못 미치므로 핀에는 흰 테두리와 그림자를, 경로선에는 3px 이상 두께를 준다. 색만으로 의미를 전달하지 않는다.
+- `positive` 글자를 `positive-muted` 배경 위에 쓰면 4.12:1로, 12px 글자 기준(4.5:1)에 못 미친다. 배지 글자를 키우거나 배경 값을 Figma에서 정한 뒤 갱신한다 `[확인]`.
+
+### 라이트 고정
+
+- 다크 모드는 없다(사용자 결정 2026-10-27). 앱 설정에서 `userInterfaceStyle: "light"`로 고정한다.
+- `global.css`의 `.dark:root` 블록은 라이트와 같은 값으로 생성된다. `dark:` variant를 쓰지 않는다.
+- Figma에 다크 값이 생기면 Pencil 변수에 테마 값을 추가하고 동기화한다(`pencil-design` 절차 C).
 
 ## 3. 타이포그래피
 
-- 서체: **Pretendard** 단일 패밀리. `app.json`의 `expo-font` 플러그인으로 등록되어 있으며(`assets/fonts/Pretendard-{Regular,Medium,SemiBold,Bold}.otf`) Android는 `fontDefinitions`로 weight가 매핑되어 `fontWeight`만으로 굵기 파일이 선택된다. **개발 빌드(`expo prebuild`/EAS)에서 적용되며 Expo Go에서는 시스템 폰트로 폴백**된다.
-- `components/ui/text.tsx`의 `Text`가 기본 클래스에 `font-sans`를 포함하므로 모든 텍스트는 이 `Text`를 사용한다. React Native `Text`를 직접 쓰지 않는다.
-- 서체 크기·굵기·행간은 킷 Text style(Poppins)의 값을 Pretendard에 그대로 적용한다(Poppins는 한글 미지원).
-- 가중치: 400(본문), 500(라벨·캡션·버튼), 600(제목·금액), 700(디스플레이·큰 금액). 세 단계 이상을 한 컴포넌트에 섞지 않는다.
-- 금액과 숫자 열은 항상 `tabular-nums` 클래스를 함께 쓴다.
-- 한글 제목은 `letterSpacing` 음수(-0.3 ~ -0.5). 본문은 0.
-- 최소 크기 12pt. 본문 기본 16pt.
-- 시스템 글꼴 크기 조정을 존중한다. 금액 표시는 `maxFontSizeMultiplier={1.3}`로 레이아웃 붕괴를 막되 비활성화하지 않는다.
+- 서체는 **Noto Sans KR** 단일 패밀리이고, Regular 400 · Medium 500 · Bold 700을 쓴다. `expo-font` config plugin으로 세 굵기를 등록하며 개발 빌드에서 적용된다. Pencil도 Google 폰트를 렌더하므로 캔버스에서 실제 서체로 보인다.
+- `components/ui/text.tsx`의 `Text`는 기본 클래스에 `font-sans`를 포함한다. 그래서 모든 글자는 이 `Text`를 쓴다.
+- 자간은 0이다(Figma 그대로).
+- 화면 제목은 20~24, 본문은 14~16이다(Figma §02).
+- 시스템 글꼴 크기 조정을 존중한다. 숫자·금액이 많은 영역은 `maxFontSizeMultiplier={1.3}`로 레이아웃 붕괴를 막되, 조정을 끄지는 않는다.
+- 금액(영수증 합계 등)과 숫자 열에는 `tabular-nums`를 함께 쓴다.
 
-타이포 토큰 클래스는 크기·행간·자간·가중치를 함께 설정한다. Tailwind 기본 `text-sm`, `text-base` 등은 RNR 컴포넌트 내부용으로 유지되며, 화면 코드에서는 아래 토큰을 우선한다.
-
-| 클래스 | 크기/행간 | 가중치 | 용도 |
-|---|---|---|---|
-| `text-display` | 32/40 | 700 | 온보딩 헤드라인 |
-| `text-amount-lg` | 36/44 tabular | 700 | 잔액, 이체 금액 입력 |
-| `text-amount-md` | 24/32 tabular | 600 | 카드 내 잔액 |
-| `text-amount-sm` | 16/24 tabular | 600 | 거래 목록 금액 |
-| `text-h1` | 24/28 | 600 | 화면 제목 (킷 Title 1) |
-| `text-h2` | 20/28 | 600 | 섹션 제목 (킷 Title 2) |
-| `text-h3` | 16/24 | 600 | 카드 제목 (킷 Title 3) |
-| `text-body-lg` | 18/28 | 400 | 강조 본문 |
-| `text-body` | 16/24 | 400 | 기본 본문 (킷 Body 2) |
-| `text-body-sm` | 14/21 | 400 | 보조 설명 |
-| `text-label` | 14/21 | 500 | 입력 라벨, 탭, 카테고리명 (킷 Body 3) |
-| `text-caption` | 12/16 | 500 | 날짜, 상태, 법적 고지 (킷 Caption 2) |
-| `text-button` | 16/24 | 500 | 버튼 (킷 Button 라벨) |
+| 클래스 | Figma 스타일 | 크기/행간 | 굵기 | 용도 |
+|---|---|---|---|---|
+| `text-display` | 여기록/Display/28 | 28/40 | 700 | 온보딩·완성 화면 헤드라인 |
+| `text-h1` | 여기록/Heading/24 | 24/34 | 700 | 화면 제목 |
+| `text-h2` | 여기록/Heading/20 | 20/30 | 700 | 섹션 제목 |
+| `text-h3` | 여기록/Title/18 | 18/28 | 700 | 카드 제목 |
+| `text-body` | 여기록/Body/16 | 16/26 | 400 | 기본 본문 |
+| `text-body-sm` | 여기록/Body/14 | 14/22 | 400 | 보조 본문 |
+| `text-label` | 여기록/Label/14 | 14/20 | 500 | 라벨·탭·칩 |
+| `text-button` | (Label/14) | 14/20 | 500 | 버튼 — Figma에 버튼 스타일이 없어 Label/14를 씀 `[확인]` |
+| `text-caption` | 여기록/Caption/12 | 12/18 | 400 | 날짜·상태 |
+| `text-micro` | 여기록/Micro/11 | 11/16 | 500 | 보조 메타 정보만. 필수 정보에는 쓰지 않는다 |
 
 ## 4. 간격 · 형태 · 크기
 
-- 4px 그리드(Tailwind 기본 스케일). 화면 좌우 패딩 `px-5`(20). 카드 내부 `p-4`(16). 섹션 간격 `gap-6`(24).
-- 모서리(킷): 배지 `rounded-sm`(6), 거래 행 아이콘 타일 `rounded-md`(10), **버튼·입력·카드·금액 칩·탭 `rounded-lg`(15)**, 바텀시트 `rounded-xl`(20). RNR `Button`·`Input`·`Card` 기본 클래스는 벤더 원본을 유지하므로 화면에서 `className="rounded-lg"`로 덮어쓴다.
-- 그림자(킷 `shadow.card`: 0/4, blur 30, `primary` 7%): 산출물에 아직 없어 `shadow-sm shadow-black/5`로 근사한다. 다크 모드에서는 그림자 대신 `border-border`.
-- 터치 타깃 최소 44pt(`min-h-touch min-w-touch`). 주요 CTA 높이 `h-button-lg`(56, 사용자 결정), 일반 버튼 `h-button-md`(44, 킷), 입력 `h-input`(44, 킷). 아이콘 `w-icon`(24) `w-icon-sm`(20) `w-icon-lg`(28, 카테고리), 아이콘 타일 `w-icon-tile`(40), 아바타 `w-avatar`(50).
-- 모션: `duration-fast/base/slow` = 150/220/320ms. 화면 전환은 플랫폼 기본. 금액 카운트업 같은 장식 애니메이션은 쓰지 않는다.
+- **간격**: Figma spacing(4·8·12·16·20·24·32·40·48)은 Tailwind 4px 스케일(`1·2·3·4·5·6·8·10·12`)과 같으므로 Tailwind 기본 스케일을 쓴다.
+  - 화면 좌우 여백은 `px-5`(20)이다.
+  - 콘텐츠 사이는 `gap-4`~`gap-6`(16~24)이다.
+- **모서리**(Figma radius):
+  - `rounded-xs` 6
+  - `rounded-sm` 8
+  - `rounded-md` 12: 버튼·입력
+  - `rounded-lg` 16: 카드
+  - `rounded-xl` 20: 바텀시트
+  - `rounded-full`: 칩·배지
+  - `2xl`·`3xl`은 RNR 호환용 코드 전용이다.
+- **크기**(Figma control):
+  - `h-button-sm` 36
+  - `h-button-md` 44: 일반 버튼
+  - `h-button-lg` 52: 주요 CTA
+  - `h-input` 52: 검색·입력
+  - `min-h-touch min-w-touch` 44: 최소 터치 영역
+  - 아이콘은 `w-icon` 24, `w-icon-sm` 20이다(코드 기본값).
+- **모션**: `duration-fast/base/slow` = 150/220/320ms. 화면 전환은 플랫폼 기본을 쓴다.
 
 ## 5. 컴포넌트 인벤토리
 
-### 5-1. React Native Reusables (설치됨, `components/ui/`)
+### 5-1. React Native Reusables (`components/ui/`)
 
-`pnpm ui:add https://reactnativereusables.com/r/nativewind/<name>.json`으로 추가한다. 추가 후 `pnpm tokens:check`를 통과하도록 arbitrary value만 조정하고 나머지는 원본을 유지한다.
+`pnpm ui:add https://reactnativereusables.com/r/nativewind/<name>.json`으로 추가한다. 추가한 뒤에는 `pnpm tokens:check`를 통과하도록 arbitrary value만 조정하고, 나머지는 원본을 유지한다.
 
 | 파일 | 내보내기 | 비고 |
 |---|---|---|
 | `text.tsx` | `Text`, `TextClassContext` | 기본 클래스에 `font-sans` 추가(프로젝트 수정) |
-| `button.tsx` | `Button`, `buttonVariants` | variant `default(primary)` `secondary` `outline` `ghost` `destructive` `link`, size `default` `sm` `lg` `icon` |
+| `button.tsx` | `Button`, `buttonVariants` | Figma `Action / Button` 대응(5-2) |
 | `input.tsx` | `Input` | `border-input bg-background` |
-| `card.tsx` | `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `CardFooter` | `bg-card rounded-xl` |
-| `badge.tsx` | `Badge` | variant `default` `secondary` `destructive` `outline` |
+| `card.tsx` | `Card` 외 | `bg-card` + `border-border`(그림자 없음) |
+| `badge.tsx` | `Badge` | Figma `Feedback / Badge` 대응 |
 | `skeleton.tsx` | `Skeleton` | `bg-muted` |
 | `separator.tsx` | `Separator` | |
-| `icon.tsx` | `Icon` | lucide 아이콘 래퍼, `className`으로 색·크기 |
-| `dialog.tsx` | `Dialog`, `DialogTrigger`, `DialogContent`, … | 루트 레이아웃의 `PortalHost` 필요(설정됨) |
+| `icon.tsx` | `Icon` | lucide 래퍼 |
+| `dialog.tsx` | `Dialog` 외 | 루트 레이아웃의 `PortalHost` 필요 |
 
-### 5-2. 프로젝트 전용 (Pencil 컴포넌트명 = 코드명)
+### 5-2. Figma 디자인 시스템 대응 (Design 페이지 컴포넌트 4종)
 
-| Pencil 컴포넌트 | 코드 | 기반 | variant / size |
-|---|---|---|---|
-| `AmountText` | `components/ui/amount-text.tsx` | `Text` | `lg` `md` `sm`, `sign` |
-| `AmountInput` | `components/ui/amount-input.tsx` | `Input` | 통화 `KRW` 고정, 콤마 포맷 |
-| `EmptyState` | `components/ui/empty-state.tsx` | `Text`, `Icon`, `Button` | 빈 목록·오류 |
-| `Toast` | `components/ui/toast.tsx` | — | `info` `success` `error`, `bg-inverse` |
-| `BottomSheet` | `components/ui/bottom-sheet.tsx` | `Dialog` 또는 별도 | `bg-popover` |
-| `ListGroup` | `components/ui/list-group.tsx` | `Separator` | 설정·메뉴 목록 |
-| `TabBar` | `components/ui/tab-bar.tsx` | `Pressable`, `Icon` | 킷 `Tab bar / *` — 활성 탭은 `bg-primary rounded-full` 알약 + 라벨, 비활성은 `text-muted-foreground` 아이콘. `app/(tabs)/_layout.tsx`의 `tabBar` |
-| `AccountCard` | `features/account/components/AccountCard.tsx` | `View`(`bg-primary rounded-lg`) | `default` `selected` — 킷 `Card Bank / 1`을 단색 사각형으로 |
-| `TransactionRow` | `features/account/components/TransactionRow.tsx` | `Text`, `Badge` | `deposit` `withdrawal` `pending` |
-| `PinPad` | `features/auth/components/PinPad.tsx` | `Button` | 6자리, 셔플 옵션 |
+| Figma 컴포넌트 (노드) | 코드 | 대응 |
+|---|---|---|
+| `Action / Button` (418:440) | RNR `Button` | Style Primary → `variant="default"`, Secondary → `"secondary"`, Outline → `"outline"`. Size Medium → 기본 + `h-button-md`, Large → `size="lg"` + `h-button-lg`. State Disabled → `disabled`(`bg-disabled text-disabled-foreground`). 모서리 `rounded-md` |
+| `Search / TextField` (418:454) | `components/ui/search-field.tsx` (RNR `Input` 조합) | State Default·Focused(`border-ring`)·Error(`border-destructive` + 필드 아래 오류 문구). 높이 `h-input`, `rounded-md`, 좌우 패딩 16 |
+| `Selection / FilterChip` (418:471) | `components/ui/filter-chip.tsx` | Size Small(`text-caption`)·Medium(`text-label`) × Default(`bg-card border-border text-foreground-secondary`)·Selected(`bg-brand-muted border-ring text-secondary-foreground`)·Disabled(`bg-muted text-muted-foreground`). `rounded-full`. 시각 높이가 44보다 작으면 `hitSlop`으로 터치 영역 44를 확보 |
+| `Feedback / Badge` (418:484) | RNR `Badge` + 프로젝트 variant | Tone Neutral(`bg-muted text-foreground-secondary`)·Brand(`bg-brand-muted text-secondary-foreground`)·Coral(`bg-highlight-muted text-highlight`)·Success(`bg-positive-muted text-positive`). `text-caption`, `rounded-full` |
 
-컴포넌트가 아직 코드에 없으면 위 이름과 variant를 그대로 사용해 만든다. 이름을 바꿔야 하면 Pencil을 먼저 바꾸고 이 표와 `design-map.json`을 동기화한다.
+### 5-3. 프로젝트 전용
+
+| 컴포넌트 | 코드 | 비고 |
+|---|---|---|
+| `TabBar` | `components/ui/tab-bar.tsx` | 탭 5개(6장). Figma Wireframe 페이지의 `공통 / 하단 탭` 참고 |
+| `EmptyState` | `components/ui/empty-state.tsx` | 아이콘·제목·설명·액션 1개. 빈 목록·오류·권한 필요 |
+| `BottomSheet` | `components/ui/bottom-sheet.tsx` | `bg-popover rounded-t-xl`. 지도 위 목록·여행방 선택 |
+| `Toast` | `components/ui/toast.tsx` | Figma에 없음 — 시안이 생기면 토큰을 정한다 `[확인]` |
+| `PermissionGate` | `components/ui/permission-gate.tsx` | 위치·카메라·사진 권한 사전 안내와 거부 상태(규칙 80, `yeogirok-ui-patterns`) |
+
+컴포넌트가 코드에 없으면 위 이름과 variant로 만든다. 이름을 바꾸면 Pencil과 이 표, `design-map.json`을 함께 고친다.
+
+### 5-4. Figma 컴포넌트에서 정리가 필요한 점 (2026-10-27 확인, Figma는 수정하지 않음)
+
+코드는 아래 정리된 값을 따르고, Figma 수정은 디자이너에게 요청한다.
+
+1. `Search / TextField` Error 상태의 테두리가 Default와 같다(`border/default`). 코드는 `border-destructive`와 오류 문구를 쓴다.
+2. 버튼 높이가 실제 39px(M)·48px(L)로, 크기 변수(44·52)와 터치 기준 44보다 작다. Outline 변형만 2px 더 크다. 코드는 크기 토큰을 따른다.
+3. 컴포넌트 글자에 텍스트 스타일이 연결되어 있지 않다. Button L의 15px는 스타일에 없는 크기다. 코드는 `text-button`(14)을 쓴다.
+4. Badge Success 배경이 변수 없이 `#EAF7F1`로 들어가 있다. 글자 대비는 4.12:1이다.
+5. Wireframe 페이지의 색이 변수와 연결되어 있지 않다(단색 채우기 3,731개 중 0개). 디자인 시스템 컴포넌트 인스턴스도 0개다. 와이어프레임의 색은 참고만 하고, 값은 이 문서를 따른다.
 
 ## 6. 화면 패턴
 
-- 화면 제목은 `text-h1` 하나. 뒤로가기는 플랫폼 기본 헤더 또는 좌상단 아이콘 버튼(`accessibilityLabel="뒤로"`).
-- 하단 탭은 KeyFin 기준 5개(홈·자산·예산·리포트·마이, `KF / TabBar`, lucide house·wallet·calculator·chart-column·user). 활성 탭은 `bg-secondary` 필 + `text-primary`.
-- 홈은 흰 배경 헤더(캡션 인사 + `text-h2` 이름, 캐릭터 활성 시 코인 배지·상점 버튼) 아래 캐릭터 방 이미지 카드(`rounded-2xl`, design/figma-assets/room-*.png)가 본문을 채우고, 하단에 `bg-primary` 남은 예산 카드(금액 `text-amount-md`↑ + `positive` 진행바).
-- 온보딩(자산 연동) 플로우는 `약관 동의 → 내 자산 선택 → 자산 불러오기 결과 → 캐릭터 입주중 → 홈`. 각 화면 하단 고정 CTA(`h-button-lg`, `bg-primary`), 은행 행은 실제 은행 아이콘(figma-assets)과 체크박스.
-- 로딩은 스피너보다 `Skeleton`. 1초 이상 걸리는 작업에만 진행 표시.
-- 오류는 필드 근처에 원인 + 해결 방법. 재시도 버튼은 중복 요청을 막는다.
-- 민감 정보(계좌번호 전체, 카드번호)는 기본 마스킹, 명시적 "보기" 액션으로만 노출.
+- 하단 탭은 5개다(기능 명세서 v2 §3, Figma 사용자 흐름 10/23).
+  1. **메인 페이지**: 코스 검색·추천, My 진입
+  2. **여행방 관리**
+  3. **AR 팁**: 카메라 화면을 채우고 우측 상단에 지도 오버레이
+  4. **기록**
+  5. **지도**: 발자취 방문 분포도, 발자취 남기기
+  - 중앙 + 메뉴는 없다. My는 탭이 아니라 메인 페이지에서 진입한다.
+- 화면 제목은 `text-h1` 하나다. 헤더 규칙은 `.agents/rules/40-styling-accessibility.md`를 따른다.
+- 로딩은 스피너보다 `Skeleton`을 쓴다. AI 초안·업로드처럼 1초 이상 걸리는 작업은 진행 상태를 단계로 보여준다.
+- 오류는 발생한 범위에서 원인과 재시도로 보여준다.
+- 권한이 필요한 기능(지도의 발자취, AR 팁, 사진·영수증 업로드)은 진입할 때 사전 안내를 거친다.
+- AI가 만든 결과(일정 초안, 기록 초안)는 "초안"임을 표시하고, 사용자가 확인·수정한 뒤에 확정한다.
+- 화면별 체크리스트는 `yeogirok-ui-patterns` 스킬에 있다.
 
 ## 7. 동기화 섹션 (Pencil이 원천 — `pencil-design` 절차 C가 갱신)
 
 | 항목 | 값 |
 |---|---|
-| 확정 원천 | `design.pen`(Pencil) — 2026-09-05 KeyFin 디자인(Figma '와이어프레임 초안')으로 전면 교체. 구현 기준 아트보드 10개(`home`, `home/character`, `terms`, `asset-select`, `asset-import-result`, `character-moving-in`, `assets`, `budget`, `report`, `mypage`) + 공용 `KF / StatusBar`·`KF / TabBar`, 이미지 에셋 `design/figma-assets/`. 문서 변수 51개 = 시맨틱 색 35(라이트/다크) + white/black + radius-* + size-* + `$font-sans`(Pretendard — Pencil은 Google 폰트만 렌더해 캔버스는 폴백 서체로 보임) |
-| 토큰 동기화 | `pnpm tokens:sync` = `scripts/sync-pen-tokens.cjs`(design.pen 변수 → tokens.json, 같은 hex는 프리미티브 참조) → `scripts/sync-tokens.cjs`(→ tailwind/global.css/theme.ts). `tokens:check`·`harness:check`·CI가 불일치를 잡는다 |
+| 값의 출처 | Figma `자율 A109` › Design 페이지(414:485) — 변수 `여기록 · Primitives`(22)·`Semantic Colors`(26, Light)·`Layout`(18), 텍스트 스타일 9개. 2026-10-27 확인 |
+| 확정 원천 | `design.pen`(Pencil) 문서 변수 49개 = 시맨틱 색 34(라이트 단일 값) + white/black + radius-xs~xl + size 7개 + `$font-sans`(Noto Sans KR). 화면 아트보드는 아직 없다(KeyFin 아트보드 2026-10-27 제거) |
+| 토큰 동기화 | `pnpm tokens:sync` = `scripts/sync-pen-tokens.cjs`(design.pen 변수 → tokens.json, 같은 hex는 프리미티브 참조) → `scripts/sync-tokens.cjs`(→ tailwind.config.js · global.css · lib/theme.ts). 불일치는 `tokens:check`·`harness:check`가 잡는다. CI는 두지 않는다(2026-09-01 결정) |
 | 마지막 동기화 | `tokens.json` `$source.pencilSyncedAt` |
-| 구현 전 대조 | `design/design-map.json`의 Pencil 노드 id → MCP `Get`·`TakeScreenshot` (`pencil-design` 절차 B) |
-| Pencil 변수에 없는 토큰 | `radius.full`, 타이포 13종, 모션, 그림자 — 코드 전용, 승인 후 `tokens.json`에서 직접 관리 |
-| Figma 내보내기(선택) | `scripts/figma/` 로컬 플러그인(`pnpm figma:build` → Figma 데스크톱 `Import plugin from manifest…`). design.pen KeyFin 화면 10개 + tokens.json → Variables·Styles·프레임. **출력물이며 코드는 Figma를 읽지 않는다** |
+| 구현 전 대조 | `design/design-map.json`의 Pencil 노드 id → MCP `Get`·`TakeScreenshot`(`pencil-design` 절차 B) |
+| Pencil 변수에 없는 토큰 | `radius.2xl·3xl·full`, 타이포 10종, 모션 — 코드 전용. 승인 후 `tokens.json`에서 직접 관리 |
+| Figma 내보내기 | 없음 — KeyFin 때 만든 `pnpm figma:build`(Pencil → Figma)는 2026-10-27 제거했다(사용자 결정: 유지 금지). 방향은 Figma → Pencil 한쪽뿐이다 |
